@@ -1,6 +1,5 @@
 # Projet SIRP
----
-author: Soufiane CHIKAR; Wissam Elaouni
+Soufiane CHIKAR; Wissam Elaouni
 ---
 
 ## Introduction
