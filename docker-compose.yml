@@ -1,14 +1,185 @@
-version: "3.7"
+version: '3.7'
+
 services:
+  wazuh.manager:
+    image: wazuh/wazuh-manager:4.4.4
+    hostname: wazuh.manager
+    restart: always
+    ports:
+      - "1514:1514"
+      - "1515:1515"
+      - "514:514/udp"
+      - "55000:55000"
+    environment:
+      - INDEXER_URL=https://wazuh.indexer:9200
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=SecretPassword
+      - FILEBEAT_SSL_VERIFICATION_MODE=full
+      - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/root-ca.pem
+      - SSL_CERTIFICATE=/etc/ssl/filebeat.pem
+      - SSL_KEY=/etc/ssl/filebeat.key
+      - API_USERNAME=wazuh-wui
+      - API_PASSWORD=MyS3cr37P450r.*-
+    volumes:
+      - wazuh_api_configuration:/var/ossec/api/configuration
+      - wazuh_etc:/var/ossec/etc
+      - wazuh_logs:/var/ossec/logs
+      - wazuh_queue:/var/ossec/queue
+      - wazuh_var_multigroups:/var/ossec/var/multigroups
+      - wazuh_integrations:/var/ossec/integrations
+      - wazuh_active_response:/var/ossec/active-response/bin
+      - wazuh_agentless:/var/ossec/agentless
+      - wazuh_wodles:/var/ossec/wodles
+      - filebeat_etc:/etc/filebeat
+      - filebeat_var:/var/lib/filebeat
+      # 1. Clone the repository to your home directory:
+      ### $ cd
+      ### $ git clone https://github.com/wazuh/wazuh-docker.git -b v4.4.4
+      # 2. Generate the certificates:
+      ### $ cd wazuh-docker/single-node
+      ### $ sudo docker-compose -f generate-indexer-certs.yml run --rm generator
+      # 3.Replace all "~" with your home directory in this file
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/root-ca-manager.pem:/etc/ssl/root-ca.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/wazuh.manager.pem:/etc/ssl/filebeat.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/wazuh.manager-key.pem:/etc/ssl/filebeat.key
+      - ~/wazuh-docker/single-node/config/wazuh_cluster/wazuh_manager.conf:/wazuh-config-mount/etc/ossec.conf
+
+  wazuh.indexer:
+    image: wazuh/wazuh-indexer:4.4.4
+    hostname: wazuh.indexer
+    restart: always
+    ports:
+      - "9201:9200"
+    environment:
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - wazuh-indexer-data:/var/lib/wazuh-indexer
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/root-ca.pem:/usr/share/wazuh-indexer/certs/root-ca.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/wazuh.indexer-key.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.key
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/wazuh.indexer.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/admin.pem:/usr/share/wazuh-indexer/certs/admin.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/admin-key.pem:/usr/share/wazuh-indexer/certs/admin-key.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer/wazuh.indexer.yml:/usr/share/wazuh-indexer/opensearch.yml
+      - ~/wazuh-docker/single-node/config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/opensearch-security/internal_users.yml
+
+  wazuh.dashboard:
+    image: wazuh/wazuh-dashboard:4.4.4
+    hostname: wazuh.dashboard
+    restart: always
+    ports:
+      - 443:5601
+    environment:
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=SecretPassword
+      - WAZUH_API_URL=https://wazuh.manager
+      - DASHBOARD_USERNAME=kibanaserver
+      - DASHBOARD_PASSWORD=kibanaserver
+      - API_USERNAME=wazuh-wui
+      - API_PASSWORD=MyS3cr37P450r.*-
+    volumes:
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/wazuh.dashboard.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/wazuh.dashboard-key.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
+      - ~/wazuh-docker/single-node/config/wazuh_indexer_ssl_certs/root-ca.pem:/usr/share/wazuh-dashboard/certs/root-ca.pem
+      - ~/wazuh-docker/single-node/config/wazuh_dashboard/opensearch_dashboards.yml:/usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
+      - ~/wazuh-docker/single-node/config/wazuh_dashboard/wazuh.yml:/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
+    depends_on:
+      - wazuh.indexer
+    links:
+      - wazuh.indexer:wazuh.indexer
+      - wazuh.manager:wazuh.manager
+
+  frontend:
+    image: ghcr.io/shuffle/shuffle-frontend:latest
+    #container_name: shuffle-frontend
+    hostname: shuffle-frontend
+    ports:
+      - "${FRONTEND_PORT}:80"
+      - "${FRONTEND_PORT_HTTPS}:443"
+    environment:
+      - BACKEND_HOSTNAME=${BACKEND_HOSTNAME}
+    restart: unless-stopped
+    depends_on:
+      - backend
+  backend:
+    image: ghcr.io/shuffle/shuffle-backend:latest
+    container_name: shuffle-backend
+    hostname: ${BACKEND_HOSTNAME}
+    # Here for debugging:
+    ports:
+      - "${BACKEND_PORT}:5001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${SHUFFLE_APP_HOTLOAD_LOCATION}:/shuffle-apps:z
+      - ${SHUFFLE_FILE_LOCATION}:/shuffle-files:z
+    env_file: .env
+    environment:
+      #- DOCKER_HOST=tcp://docker-socket-proxy:2375
+      - SHUFFLE_APP_HOTLOAD_FOLDER=~/Shuffle/shuffle-apps
+      - SHUFFLE_FILE_LOCATION=~/Shuffle/shuffle-files
+    restart: unless-stopped
+  orborus:
+    image: ghcr.io/shuffle/shuffle-orborus:latest
+    container_name: shuffle-orborus
+    hostname: shuffle-orborus
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      #- DOCKER_HOST=tcp://docker-socket-proxy:2375
+      - SHUFFLE_WORKER_VERSION=latest
+      - ENVIRONMENT_NAME=${ENVIRONMENT_NAME}
+      - BASE_URL=http://${OUTER_HOSTNAME}:5001
+      - DOCKER_API_VERSION=1.40
+      - SHUFFLE_BASE_IMAGE_NAME=${SHUFFLE_BASE_IMAGE_NAME}
+      - SHUFFLE_BASE_IMAGE_REGISTRY=${SHUFFLE_BASE_IMAGE_REGISTRY}
+      - SHUFFLE_BASE_IMAGE_TAG_SUFFIX=${SHUFFLE_BASE_IMAGE_TAG_SUFFIX}
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+      - SHUFFLE_PASS_WORKER_PROXY=${SHUFFLE_PASS_WORKER_PROXY}
+      - SHUFFLE_PASS_APP_PROXY=${SHUFFLE_PASS_APP_PROXY}
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+  opensearch:
+    image: opensearchproject/opensearch:2.5.0
+    hostname: shuffle-opensearch
+    container_name: shuffle-opensearch
+    environment:
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms2048m -Xmx2048m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - cluster.initial_master_nodes=shuffle-opensearch
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - cluster.name=shuffle-cluster
+      - node.name=shuffle-opensearch
+      - node.store.allow_mmap=false
+      - discovery.seed_hosts=shuffle-opensearch
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 
+        hard: 65536
+    volumes:
+      - ${DB_LOCATION}:/usr/share/opensearch/data:z
+    ports:
+      - 9200:9200
+    restart: unless-stopped
+
   thehive:
-    image: thehiveproject/thehive:latest
+    image: strangebee/thehive:latest
     restart: unless-stopped
     depends_on:
       - cassandra
       - elasticsearch
       - minio
-      - cortex
-      - prometheus
+      - cortex.local
     mem_limit: 1500m
     ports:
       - "0.0.0.0:9000:9000"
@@ -16,7 +187,7 @@ services:
       - JVM_OPTS="-Xms1024M -Xmx1024M"
     command:
       - --secret
-      - "lab123456789"
+      - "SecretPassword"
       - "--cql-hostnames"
       - "cassandra"
       - "--index-backend"
@@ -30,15 +201,13 @@ services:
       - "--s3-secret-key"
       - "minioadmin"
       - "--s3-use-path-access-style"
-      #- "--no-config-cortex"
-      - "--cortex-port"
-      - "9001"
-      - "--cortex-keys"
-      - "vuaNtCWlpewWXzz9JI1L/CD/HsnuWLPC" #remember to change this to your API key
+      # "--no-config-cortex"
+      #- "--cortex-port"
+      #- "9001"
+      #- "--cortex-keys"
+      #- "k3DZO07qOoIMfNNS5qLloPmMS2PnhMMR"
     volumes:
-      - ./thehive/conf/application.conf:/etc/thehive/application.conf 
-    networks:
-      - SOC_NET
+      - thehivedata:/etc/thehive/application.conf
 
   cassandra:
     image: 'cassandra:4'
@@ -50,25 +219,6 @@ services:
       - CASSANDRA_CLUSTER_NAME=TheHive
     volumes:
       - cassandradata:/var/lib/cassandra
-    networks:
-      - SOC_NET
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
-    restart: unless-stopped
-    mem_limit: 512m
-    ports:
-      - "0.0.0.0:9200:9200"
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - cluster.name=hive
-      - http.host=0.0.0.0
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
-    volumes:
-      - elasticsearchdata:/usr/share/elasticsearch/data
-    networks:
-      - SOC_NET
 
   minio:
     image: quay.io/minio/minio
@@ -81,34 +231,43 @@ services:
       - "0.0.0.0:9002:9002"
     volumes:
       - "miniodata:/data"
-    networks:
-      - SOC_NET
 
-  cortex:
-    image: thehiveproject/cortex:latest
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+    mem_limit: 1500m
+    ports:
+      - "0.0.0.0:9205:9200"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      #- cluster.name=hive
+      #- http.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    volumes:
+      - elasticsearchdata:/usr/share/elasticsearch/data
+
+  cortex.local:
+    image: thehiveproject/cortex:3.1.7
     restart: unless-stopped
     environment:
-      - job_directory=/opt/cortex/jobs
+      - job_directory=/tmp/cortex-jobs
+      - docker_job_directory=/tmp/cortex-jobs
     volumes:
-      - cortexdata:/var/run/docker.sock
-      - cortexdata:/opt/cortex/jobs
-      - cortexdata:/var/log/cortex
-      - cortexdata:/cortex/application.conf
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/cortex-jobs:/tmp/cortex-jobs
     depends_on:
       - elasticsearch
     ports:
       - "0.0.0.0:9001:9001"
-    networks:
-      - SOC_NET
-
-  misp:
+      
+  misp.local:
     image: coolacid/misp-docker:core-latest
     restart: unless-stopped
     depends_on: 
       - misp_mysql
     ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
+      - "0.0.0.0:85:80"
+      - "0.0.0.0:448:443"
     volumes:
       - "./server-configs/:/var/www/MISP/app/Config/"
       - "./logs/:/var/www/MISP/app/tmp/logs/"
@@ -127,8 +286,6 @@ services:
       - "CRON_USER_ID=1"   
       - "REDIS_FQDN=redis"
       - "HOSTNAME=https://10.200.200.253"
-    networks:
-      - SOC_NET
 
   misp_mysql:
     image: mysql/mysql-server:5.7
@@ -140,13 +297,9 @@ services:
       - MYSQL_USER=mispuser
       - MYSQL_PASSWORD=misppass
       - MYSQL_ROOT_PASSWORD=mispass
-    networks:
-      - SOC_NET
 
   redis:
     image: redis:5.0.6
-    networks:
-      - SOC_NET
 
   misp-modules:
     image: coolacid/misp-docker:modules-latest
@@ -154,30 +307,23 @@ services:
       - "REDIS_BACKEND=redis"
     depends_on:
       - redis
-      - misp_mysql
-    networks:
-      - SOC_NET
-
-  prometheus:
-    image: prom/prometheus:v2.30.3
-    restart: unless-stopped
-    ports:
-      - "0.0.0.0:9090:9090"
-    volumes:
-      - ./prometheus:/etc/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-    networks:
-      - SOC_NET
-
+      - misp_mysql  
+      
 volumes:
+  wazuh_api_configuration:
+  wazuh_etc:
+  wazuh_logs:
+  wazuh_queue:
+  wazuh_var_multigroups:
+  wazuh_integrations:
+  wazuh_active_response:
+  wazuh_agentless:
+  wazuh_wodles:
+  filebeat_etc:
+  filebeat_var:
+  wazuh-indexer-data:
   miniodata:
   cassandradata:
   elasticsearchdata:
-  cortexdata:
   thehivedata:
   mispsqldata:
-
-networks:
-  SOC_NET:
-    driver: bridge
