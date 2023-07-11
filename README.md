@@ -1,6 +1,7 @@
-% title
-% Soufiane CHIKAR; Wissam Elaouni
 # Projet SIRP
+---
+author: Soufiane CHIKAR; Wissam Elaouni
+---
 
 ## Introduction
 
