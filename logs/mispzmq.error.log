@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "/var/www/MISP/app/files/scripts/mispzmq/mispzmq.py", line 214, in <module>
+    mzq.main()
+  File "/var/www/MISP/app/files/scripts/mispzmq/mispzmq.py", line 182, in main
+    data = self.r.blpop(lists, timeout=10)
+  File "/usr/local/lib/python3.9/dist-packages/redis/commands/core.py", line 2566, in blpop
+    return self.execute_command("BLPOP", *keys)
+  File "/usr/local/lib/python3.9/dist-packages/redis/client.py", line 1269, in execute_command
+    return conn.retry.call_with_retry(
+  File "/usr/local/lib/python3.9/dist-packages/redis/retry.py", line 49, in call_with_retry
+    fail(error)
+  File "/usr/local/lib/python3.9/dist-packages/redis/client.py", line 1273, in <lambda>
+    lambda error: self._disconnect_raise(conn, error),
+  File "/usr/local/lib/python3.9/dist-packages/redis/client.py", line 1259, in _disconnect_raise
+    raise error
+  File "/usr/local/lib/python3.9/dist-packages/redis/retry.py", line 46, in call_with_retry
+    return do()
+  File "/usr/local/lib/python3.9/dist-packages/redis/client.py", line 1270, in <lambda>
+    lambda: self._send_command_parse_response(
+  File "/usr/local/lib/python3.9/dist-packages/redis/client.py", line 1246, in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+  File "/usr/local/lib/python3.9/dist-packages/redis/client.py", line 1286, in parse_response
+    response = connection.read_response()
+  File "/usr/local/lib/python3.9/dist-packages/redis/connection.py", line 874, in read_response
+    response = self._parser.read_response(disable_decoding=disable_decoding)
+  File "/usr/local/lib/python3.9/dist-packages/redis/connection.py", line 347, in read_response
+    result = self._read_response(disable_decoding=disable_decoding)
+  File "/usr/local/lib/python3.9/dist-packages/redis/connection.py", line 357, in _read_response
+    raw = self._buffer.readline()
+  File "/usr/local/lib/python3.9/dist-packages/redis/connection.py", line 260, in readline
+    self._read_from_socket()
+  File "/usr/local/lib/python3.9/dist-packages/redis/connection.py", line 213, in _read_from_socket
+    raise ConnectionError(SERVER_CLOSED_CONNECTION_ERROR)
+redis.exceptions.ConnectionError: Connection closed by server.

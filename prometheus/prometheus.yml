@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'thehive'
+    static_configs:
+      - targets: ['thehive:9000']
+  - job_name: 'cortex'
+    static_configs:
+      - targets: ['cortex:9001']
+  - job_name: 'misp'
+    static_configs:
+      - targets: ['misp']
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets: ['elasticsearch:9200']
