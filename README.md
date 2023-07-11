@@ -73,10 +73,28 @@ Packetbeat est un élément qui fait aussi partie de ce qu'ils appellent ELK Bea
 Elastalert est un outil simple pour alerter sur les anomalies, les pics ou d'autres modèles d'intérêt dans les données Elasticsearch. Il fonctionne en combinant Elasticsearch avec deux types de composants, les types de règles et les alertes. Elasticsearch est interrogé périodiquement et les données sont transmises au type de règle, qui détermine quand une correspondance est trouvée. Ce composant fonctionne avec Elasticsearch mais ne fait pas partie de la Suite Elastic. Praeco est également mentionné pour pouvoir implémenter les alertes graphiquement, cet outil fonctionne avec Elastalert.
 
 
-### Gestion des incidents et partage d'informations
+## Gestion des incidents et partage d'informations
 
 TheHive est un composant de base de la plateforme SIRP, il se définit comme une solution open source évolutive conçue pour la gestion des incidents de sécurité de l'ouverture à la fermeture. Même s'il faut dire que si nous n'avions que ce composant, tout serait manuel et en fait nous n'aurions pas de capacités de détection ou de réponse, ce serait une solution incomplète.
 
 Pour compléter TheHive on va donc utiliser Cortex, c'est une plateforme d'analyse de sécurité open source qui aide les équipes de sécurité à automatiser et à coordonner les tâches de réponse aux incidents de sécurité, en fournissant une interface conviviale et des connecteurs pour intégrer les outils de sécurité existants.
 
 MISP est une plate-forme de partage (Wiki) de menaces open source maintenue par CIRCL qui, parmi de nombreuses autres utilisations, permet à l'opérateur de s'abonner à des flux de renseignements sur les menaces. Ces flux peuvent être des abonnements payants ou des flux gérés par la communauté de diverses organisations (telles que d'autres sociétés ou des organismes officiels tels que l'ANSSI). Il permet de partager ce que l'on appelle des IoC afin qu'un incident puisse être évité ou traité en créant des règles de détection ou de blocage basées sur des modèles.
+
+## Analyse et conception de la solution
+
+La gestion des incidents est un processus d'amélioration continue qui commence par la phase de préparation et de prévention. Cette phase nécessite des outils de détection et de surveillance adaptés aux besoins de l'organisation. Les systèmes d'exploitation et les middleware ont des journaux de sécurité, mais des outils supplémentaires sont nécessaires pour détecter les activités malveillantes. Les RBS (Endpoint Detection and Response) combinent diverses fonctionnalités de sécurité et incluent généralement un antivirus et un HIDS.
+
+Un autre élément important est un NIDS ou NIPS pour la détection et la réponse au niveau du réseau. Les RBS fonctionnent au niveau de l'hôte tandis que les NIDS/NIPS fonctionnent au niveau du réseau pour combler les lacunes de détection. Les solutions open source telles que MISP sont des exemples populaires de produits de détection au niveau du réseau. Dans l'ensemble, il est crucial de disposer des outils adéquats pour détecter et répondre aux menaces de sécurité afin de protéger efficacement une organisation.
+
+### Wazuh
+
+Comme indiqué précédemment, Wazuh est une solution open source qui nous permet de surveiller nos appareils afin de détecter les menaces, l'intégrité de nos systèmes et de réagir aux incidents, entre autres (comme « compliance » pour vérifier que les ordinateurs respectent la politique de sécurité de l'entreprise).
+Pourquoi Wazuh ?
+Bien qu'il puisse y avoir d'autres options, il s'agit d'une suite qui intègre de multiples fonctionnalités qu'il serait autrement nécessaire de déployer avec différents composants logiciels et que nous n'aurions donc pas l'intégration que nous pouvons avoir avec ce produit. Il s'agit d'une solution avec un support communautaire suffisant (de nombreuses solutions apparaissent et disparaissent en peu de temps) et suffisamment mature pour être implémentée dans une organisation, ce qui est réalisé en publiant de nouvelles versions en dépannant les bugs et en ajoutant des fonctionnalités au produit (au moment de réaliser cette étude du produit, ils vont dans la version 4.4.1).
+Outre la communauté, il existe également une entreprise qui peut prendre en charge le produit, point important dans de nombreuses organisations sans lequel ils ne se lanceraient pas dans la mise en œuvre de cette solution, la société qui prend en charge le produit Wazuh Inc. 
+
+Deux services d'assistance sont disponibles :
+
+•   Standard : 8x5 pendant les heures de bureau (réponse maximale dans 8 heures)
+•   Premium : 24x7 (réponse maximale en 4 heures)
