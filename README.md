@@ -142,11 +142,12 @@ Il est possible d'accéder à Wazuh Server via le Web avec un navigateur ou d'in
 L'intégration avec Kibana, comme indiqué ci-dessus est l'une des fonctionnalités de ce produit, dispose d'un plugin qui permet aux utilisateurs de visualiser et d'analyser les alertes Wazuh stockées sur Elasticsearch. Les utilisateurs peuvent obtenir des statistiques par agent, rechercher des alertes et les filtrer en utilisant différentes vues. S'intègre à l'API Wazuh pour récupérer des informations sur la gestion et la configuration des agents, des journaux, des règles définies, des groupes, etc.
 Parmi les autres fonctionnalités du produit, citons l'analyse des vulnérabilités basée sur les BDD CVE et la détection du logiciel installé, le Wazuh fait également l'inventaire, ainsi que le scan de compatibilité des stratégies et des paramètres de sécurité de l'ordinateur.
 
-###Filebeat
+### Filebeat
 
 Il s'agit d'un agent léger qui vous permet de transférer et de centraliser des données de journaux. Il surveille les fichiers configurés et permet de les envoyer à Elastichsearch ou Logstash pour indexation.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/87d894a9-07f7-4983-9bb9-78613adff3d6)
+
 Illustration 4 - Surveillance et envoi des journaux
 
 Pour collecter ces journaux, vous devez installer cet agent sur chacun des ordinateurs que vous voulez surveiller et envoyer des journaux à notre SIEM et configurer les fichiers à partir desquels vous voulez recueillir des informations.
@@ -160,7 +161,7 @@ Nous disposons de versions pour Windows et Linux, la dernière version disponibl
 Son rôle est similaire à celui de l'agent Filebeat que nous avons vu au point précédent, bien qu'il s'agisse ici d'un composant spécifique de systèmes Windows, car il vous permet de collecter et d'envoyer les informations générées dans le journal des événements de ce S.O.
 Bien qu'il puisse être utile de disposer de tous les événements Windows centralisés dans Elastic dans notre cas, nous nous concentrerons sur ceux du journal des événements de sécurité.
 
-###Auditbeat
+### Auditbeat
 
 Cet agent est installé sur les plates-formes Linux et vous permet d'extraire des informations des librairies Audit de ce S.O. sans avoir à modifier la configuration du démon audited.
 
@@ -178,7 +179,8 @@ Packetbeat peut analyser les paquets et décoder les données au niveau de l'app
 C'est un composant de la suite de produits Elastic qui permet la réception de journaux, le sablage et la transformation en temps réel, indépendamment de leur format ou de leur complexité. Dans notre cas, il est utilisé pour envoyer les données à Elasticsearch, mais la sortie de données peut être autre, envoi par courrier, bbdd, etc.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/604461db-e734-440b-a487-b0cb0b1dca69)
- Illustration 5 - Billets / Sorties Logstash
+ 
+Illustration 5 - Billets / Sorties Logstash
 Installable sur Linux, Windows, MacOS ou dans Docker
 
 ###Fonctionnalités Logstash
@@ -196,7 +198,7 @@ Filtres : vous pouvez configurer des filtres personnalisés, même si le produit
 
 Sorties : Elasticsearch est la base de la suite de produits pour la recherche et l'analyse de données, mais ce n'est pas la seule option possible. Logstash dispose d'une variété de sorties qui vous permettent d'acheminer les données où vous le souhaitez, ce qui vous donne la possibilité de déverrouiller un grand nombre de cas d'utilisation ultérieurs.
 
-###Elasticsearch
+### Elasticsearch
 
 C'est le noyau de la suite, le composant central de l'outil. C'est un moteur de recherche et d'analyse distribué avec une API RESTful.
 
@@ -222,7 +224,7 @@ Elasticsearch permet de définir des alertes et dispose d'un large éventail de 
 Le produit fournit une API RESTful et JSON puissantes, ce qui permet l'accès au produit via du code d'application dans plusieurs langages Java, Go, .NET, PHP, Javascript, Perl, Python, Ruby, etc.
 Vous disposez d'autres fonctionnalités que vous pouvez consulter sur le site Web du produit, mais que nous ne détaillerons pas dans ce document.
 
-###Kibana
+### Kibana
 
 Ce composant est une interface utilisateur open source qui vous permet de visualiser les données Elasticsearch de manière graphique et visuelle via votre interface Web.
 
@@ -250,13 +252,13 @@ Comme cela a déjà été dit, la principale capacité du produit est l'affichag
 
 •      Exporter les informations via CSV
 
-###Analyse des composants de gestion des incidents
+### Analyse des composants de gestion des incidents
 
 Jusqu'à présent, nous avons analysé les produits qui nous permettent de détecter les menaces et, dans certains cas, de répondre de manière autonome à ce qu'un RBS et un NIPS peuvent faire, nous avons également constaté qu'ils peuvent générer des événements, des alertes et que ceux-ci peuvent être envoyés à notre plateforme SIEM, ainsi que les journaux S.O. et middleware, y compris le trafic réseau reçu par les ordinateurs.
 
 Avec toutes ces informations au cas où une menace deviendrait un incident, nous avons besoin d'une plate-forme pour le gérer et cette plate-forme est principalement TheHive, avec l'aide de Cortex et de MISP.
 
-###TheHive
+### TheHive
 
 Hive est un outil open source qui permet de gérer les incidents de sécurité, conçu pour être utilisé par les SOC, les CSIRT, les CERT, etc. en général, quiconque souhaite gérer les incidents de sécurité qui doivent faire l'objet d'une enquête.
 
@@ -302,14 +304,14 @@ Action :
 
 Le produit TheHive fournit une API REST pour l'interaction et l'automatisation des tâches en plus de l'accès Web pour les utilisateurs interactifs.
 
-###Cortex
+### Cortex
 
 Cortex est un analyseur d'observables et un moteur de réponse actif qui permet, en conjonction avec TheHive, d'aider à la phase de confinement d'un incident de sécurité.
 
 L'outil est open source et permet d'automatiser le traitement des observables en exposant une REST API.
 Bien que Cortex soit free, cela ne signifie pas que les analyseurs et les répondeurs qu'il inclut lors de demandes à des tiers ne nécessitent pas de paiement ou d'abonnement à l'utilisation.
 
-###Capacités de Cortex
+### Capacités de Cortex
 
 Cortex peut être utilisé de manière autonome en utilisant son « interface » Web ou en association avec la plateforme de gestion des incidents TheHive, comme indiqué ci-dessus, il permet d'automatiser et d'exécuter simultanément des analyseurs et des répondeurs pour plusieurs cas.
 
@@ -338,7 +340,7 @@ Exécution :
 
 •      Les analyseurs Cortex peuvent également être consultés à partir de MISP pour enrichir les événements et étendre la couverture de vos investigations.
 
-###MISP
+### MISP
 
 Il s'agit d'une plateforme open source pour le traitement des renseignements sur les menaces et d'une norme ouverte permettant de partager ces renseignements entre les organisations et les CERT, CSIRT, etc. respectifs.
 
@@ -348,7 +350,7 @@ La plate-forme permet d'enregistrer de manière structurée les IoCs et de les p
 
 Au moment de cette analyse, la plus grande version de MISP est la version 2.4, pour installer le produit, vous pouvez utiliser un OVA, installer sur un S.O. existant ou avec Docker, la documentation du produit comprend également de nombreuses options pour effectuer l'installation avec puppet, ansible, etc.
 
-###Fonctionnalités MISP
+### Fonctionnalités MISP
 
 L'une des principales réalisations de cet outil a été son utilisation généralisée et le partage des informations entre les organisations.
 Les attaques perpétrées par des cybercriminels, et même encouragées ou soutenues à des degrés divers par les États, augmentent en nombre et en sophistication, ce qui exige que les organisations travaillent également ensemble pour se protéger contre ces menaces et que MISP est un outil qui encourage ce type d'interaction de manière automatisée, en partageant l'intelligence que chaque organisation obtient après avoir analysé et enquêté sur une attaque.
@@ -395,15 +397,16 @@ Sur le site de MISP, nous pouvons trouver ses fonctionnalités [11] :
 Dans notre installation, nous configurerons MISP pour importer des informations, car nous n'aurons pas de cas à partager, bien que vous puissiez effectuer une configuration en simulant un environnement de travail réel dans lequel nous pouvons contribuer à la communauté.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/780c387b-d8b0-45ca-9fec-6439acd03c8a)
+
 Illustration 6 - Schéma MISP
 
-###Éléments qui composent notre plate-forme SIRP
+### Éléments qui composent notre plate-forme SIRP
 
 Après avoir analysé les différents composants qui pourraient faire partie d'une solution SIRP et qui ont été traités dans les sections précédentes, il est temps de choisir ce que nous allons mettre en œuvre dans notre solution et pourquoi ces composants et pas d'autres.
 
 Tout d'abord, nous définirons les cas d'utilisation que notre plate-forme aura, ce qui facilitera le choix des composants, cela ne signifie pas que la plate-forme ne pourra pas répondre à d'autres cas d'utilisation, mais ils ne seront pas traités dans ce TFM.
 
-####Cas d’utilisation
+#### Cas d’utilisation
 
 Les cas d'utilisation proposés pour ce TFM consistent en plusieurs caractéristiques de gestion des incidents qui testent les différents éléments de notre plateforme.
 
@@ -417,7 +420,7 @@ L'idée est de pouvoir gérer les incidents à l'aide des outils indiqués, avec
 
 Pour la présentation et la défense du TFM, un des trois cas d'utilisation est choisi pour montrer le travail effectué et la façon dont il se comporte dans un environnement de test généré à l'utilisation et qui est documenté à partir du point 3.
 
-###Composants de la solution
+### Composants de la solution
 
 Il s'agirait des composants de notre plateforme SIRP, qui comprend, comme déjà traité, les éléments de détection et de réponse, la gestion des événements et les journaux de sécurité, ainsi que la gestion des incidents avec intégration avec des automatismes de traitement des observateurs d'incidents, ainsi que les réponses aux incidents pour améliorer la phase d'endiguement.
 Nous incluons également un élément qui nous permet de partager et de collaborer avec d'autres organisations avec nos incidents analysés, déjà étudiés et
@@ -447,7 +450,7 @@ D'un autre côté, je l'ai également choisi pour des références d'intégratio
 Elastalert a également été inclus mais n'a pas été expliqué en détail dans ce chapitre pour la génération d'alertes et la création de cas dans TheHive, bien que l'exigence étant la génération de cas pour l'enquête sur les incidents dans TheHive il soit possible d'utiliser également l'option qui inclut ce produit TheHive4py, donc nous avons temporairement inclus le composant, mais nous verrons finalement quelle est la meilleure option lors de la phase de mise en œuvre et d'intégration.
 Les autres composants de la solution ont été choisis en fonction des cas d'utilisation qu'il est proposé de traiter avec cette plate-forme SIRP.
 
-###Conception de la solution
+### Conception de la solution
 
 La solution pour notre plate-forme SIRP consiste à déployer les composants mentionnés ci-dessus comme s'il s'agissait d'un service de Cloud computing (SOCaaS), il s'agirait de fournir à nos clients potentiels une plate-forme complète de gestion des incidents de sécurité sur laquelle ils pourraient travailler en tant qu'utilisateurs ou déléguer entièrement à nous (votre fournisseur de services SOC et la plate-forme associée) pour effectuer toutes les tâches.
 
@@ -456,10 +459,11 @@ Les éléments de détection et de réponse nécessaires, tels que les agents Wa
 Le schéma logique de la solution et de ses composants est présenté ci-dessous.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e1966a81-5b9e-492c-ad0c-53fa00813f0f)
+
 Illustration 7 - Schéma logique des composants
 
-##Mise en œuvre
-###Options de déploiement
+## Mise en œuvre
+### Options de déploiement
 
 Une fois que vous avez déterminé les composants qui constituent la solution, vous devez maintenant prendre des décisions concernant la mise en œuvre. Le déploiement nécessite une haute disponibilité et une solution évolutive, ce qui nécessite un haut composant d'automatisation.
 
@@ -469,7 +473,7 @@ Ainsi, les multiples options d'installation des produits ainsi que leurs version
 
 Pour donner un exemple pour comprendre ce qui est dit au point précédent, la version documentée à installer avec Wazuh de ELK n'est pas celle du site Web d'Elastic mais l'Opendistro Elasticsearch, bien que sur le site Web de Wazuh on traite également des options d'installation avec l'option free d'Elastic, la dernière version de ce produit qui est la  dans le cas concret de Kibana n'a pas le plugin de Wazuh.
 
-###Installation manuelle des produits
+### Installation manuelle des produits
 
 Les différents produits disposent d'options d'installation plus ou moins documentées pour effectuer l'installation et la configuration des différents éléments via des paquets standard de SE et/ou des sources via des référentiels principalement de type GIT.
 
@@ -477,7 +481,7 @@ Il existe également des OVA avec des produits préinstallés et configurés sur
 
 Cela peut être très utile pour un environnement de test et pour s'entraîner relativement rapidement à la fonctionnalité des produits (en particulier le CSIRT-KIT), mais comme dans notre cas nous voulons avoir l'automatisation, la haute disponibilité et l'évolutivité de la solution car cette méthode a été abandonnée.
 
-###Installation automatisée avec Ansible
+### Installation automatisée avec Ansible
 
 Ansible est un logiciel open source qui est devenu très populaire ces dernières années. Il permet de gérer de façon centralisée la configuration et le déploiement des applications et des produits, ce qui simplifie considérablement, grâce à des recettes appelées playbooks (dans un langage déclaratif YAML) qui utilisent des modules spécifiques, tels que la gestion des packages de système d'exploitation, la copie de fichiers et de nombreuses autres fonctionnalités, le produit comprend de nombreux modules et la communauté continue de créer de nouveaux modules. Il existe des référentiels tels que Ansible-galaxy où vous pouvez trouver une multitude d'exemples de playbooks et de rôles (concept d'ansible) pour effectuer diverses tâches dans les applications et les systèmes gérés.
 
@@ -485,7 +489,7 @@ Dans le cas spécifique de la mise en œuvre de la plate-forme SIRP, les produit
 
 Pour les autres produits choisis pour la plate-forme SIRP, il existe également des Playbooks prêts à l'installation, comme cela a déjà été dit, la communauté facilite cela dans de nombreux cas via des référentiels GIT, etc.
 
-###Installation avec Docker / Docker Compose
+### Installation avec Docker / Docker Compose
 
 Docker est l'une des plates-formes de conteneurs les plus utilisées aujourd'hui, permettant de séparer les applications et l'infrastructure nécessaires à leur exécution dans ce que l'on appelle les microservices.
 Le conteneur diffère entre autres de la virtualisation, car il est beaucoup plus léger, car vous n'avez pas besoin de déployer le système d'exploitation complet, mais une couche système minimale et les librairies nécessaires pour exécuter l'application/le produit.
@@ -496,7 +500,7 @@ Docker Compose est un outil qui permet d'« orchestrer », plutôt d'automatiser
 Dans notre cas particulier pour la plate-forme SIRP, ce serait une bonne solution et cela nous permet d'atteindre l'objectif d'automatisation, pour la partie haute disponibilité et évolutivité, il suffirait de disposer de plus de matériel capable d'exécuter des conteneurs et d'appliquer la recette personnalisée pour créer et gérer les conteneurs nécessaires.
 Il existe une solution pour les conteneurs pour Wazuh, Elasticsearch (OpenDistro, et la plus entreprise d'Elastic), ainsi que pour TheHive, Cortex et MISP, qui ne fonctionnent pas dans certains cas avec les dernières versions du produit, mais permettent d'utiliser ces images. Vous pouvez également créer votre propre image ou une image basée sur la modification d'une image existante à l'aide des fichiers de configuration Dockerfile.
 
-###Installation au-dessus de Kubernetes
+### Installation au-dessus de Kubernetes
 
 À ce stade, nous avons déjà une solution pour pouvoir déployer automatiquement les composants d'application en adaptant les « recettes » aux différents équipements, comme cela a déjà été dit au point précédent, mais pour faire une véritable orchestration des composants, nous avons Kubernetes.
 Kubernetes (communément appelé k8s), comme indiqué sur votre site Web, est une plateforme portable et extensible open source pour la gestion des charges de travail et des services, tout comme avec l'option Docker-Compose, vous avez une manière déclarative de gérer le déploiement des composants (microservices), en exécutant le deploy des PODs et services nécessaires au fonctionnement de l'application ou du produit. Et tout cela, grâce à un environnement de gestion APIfigé.
@@ -508,7 +512,7 @@ Nous avons également discuté précédemment du concept de POD, qui est l'unit�
 Une fois la technologie introduite, nous allons à notre étude de cas qui est la plate-forme SIRP avec les composants déjà mentionnés. Il existe de la documentation sur l'installation de Wazuh / Elasticsearch sur la plate-forme k8s, pour tous les autres composants, bien qu'il puisse y avoir une solution au niveau de la communauté open source, ce qui peut être basé sur les implémentations effectuées directement dans Docker ou Docker-Compose pour développer notre propre recette d'installation à partir des images déjà disponibles (TheHive, Cortex et MISP).
 Ainsi, avec ce système de déploiement, nous pouvons avoir une solution avec une haute disponibilité, évolutivité et automatisation dans le déploiement et la maintenance.
 
-###Solution d'installation choisie
+### Solution d'installation choisie
 
 Après avoir examiné les différentes options disponibles pour la mise en œuvre de notre solution SIRP, il a été considéré que la meilleure option est d'utiliser la plateforme Kubernetes car elle offre tous les avantages dont un déploiement de ce type avec plusieurs composants peut avoir besoin.
 
@@ -523,17 +527,18 @@ Les nœuds maîtres, car nous pourrions dire qu'ils sont des nœuds de gestion d
 Pour des raisons de sécurité, le déploiement d'applications ou d'autres composants sur les nœuds maîtres doit être désactivé. Nous disposerons donc de 4 nœuds efficaces pour déployer notre solution SIRP.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/2f305055-5c5d-4e1b-92be-1ebcafc67f85)
+
 Illustration 7 - HA kubernetes etcd stacked (kubernetes.io)
 
 Il existe deux modèles pour monter HA de Kubernetes avec kubeadm, le modèle topologique de l'image qui est suivi dans ce projet «etcd stacked» et le modèle «etcd external».
 
- ###Ressources
+ ### Ressources
 
  Dans l'environnement de simulation utilisé dans ce projet qui a été déployé, nous pouvons diviser les ressources utilisées en deux parties, celles qui composent le réseau d'entreprise à protéger et ce que serait la plateforme SIRP (simulation d'un environnement Cloud avec Kubernetes).
 
 Toute la solution s'articule autour de 4 ordinateurs physiques dotés de processeurs Intel i7 QuadCore et de 32 Go de RAM.
 
-###Plate-forme SIRP (simulation Cloud On-premise)
+### Plate-forme SIRP (simulation Cloud On-premise)
 
 Les ressources utilisées dans la simulation de Cloud On-premise ou Cloud Privé sont les suivantes :
 
