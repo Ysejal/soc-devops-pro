@@ -100,3 +100,23 @@ Deux services d'assistance sont disponibles :
 
 •   Standard : 8x5 pendant les heures de bureau (réponse maximale dans 8 heures)
 •   Premium : 24x7 (réponse maximale en 4 heures)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/9b78d9af-fd5a-4504-b48a-44caa62d0f6c)
+
+Illustration 1 - Fonctionnalités de l'agent Wazuh
+
+Ils ont également la possibilité d'être consommés en mode SaaS en souscrivant ce service à Wazuh Inc.
+Il s'agit d'un produit évolutif qui permet de le déployer dans une organisation quelle que soit sa taille à l'aide d'une structure client/serveur, les ordinateurs à protéger auraient la partie cliente dans ce cas (Wazuh Agent) et nous pouvons avoir un ou plusieurs serveurs (Wazuh Server), ils peuvent évoluer horizontalement pour recevoir des informations des agents, ainsi que pour leur configuration.
+
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e18fb7d8-6bb0-4bb8-83d2-a478de6a73bf)
+
+Illustration 2 - Fonctionnalités Wazuh Server
+
+Il s'agit d'une plate-forme multiplateforme, ce qui est également important car les organisations peuvent être très hétérogènes à cet égard, bien que la plate-forme utilisateur prédominante soit généralement Windows, il y a aussi ceux qui choisissent Mac ou Linux, la partie serveurs ouvre encore plus l'éventail des possibilités (bien qu'aujourd'hui nous ayons principalement Linux et Windows), nous pouvons avoir notre Wazuh Agent à la fois sur Windows, Linux, Mac OS, AIX, Solaris et HP-UX.
+Vous avez plusieurs options de déploiement sur des solutions de type IaaS ou CaaS, dans le premier cas vous avez plusieurs options d'installation sur un seul serveur avec un OVA, nous avons le système d'exploitation et le logiciel préinstallé, est une solution rapide pour travailler immédiatement avec le produit, bien que non recommandée pour une organisation de taille moyenne/grande en fonction des performances, des instructions sont également disponibles pour l’installation de ses composants de manière distribuée et avec des automatismes puppet et ansible.
+
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/589e5554-bf6a-4c28-9af2-2d79f4edfc61)
+
+Illustration 3 - Installation distribuée Wazuh
+
+
+
