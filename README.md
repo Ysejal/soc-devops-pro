@@ -540,7 +540,7 @@ Les nœuds maîtres, étant les nœuds de gestion de Kubernetes, seront égaleme
 
 Par mesure de sécurité, le déploiement d'applications ou d'autres composants sur les nœuds maîtres sera désactivé. Nous disposerons donc de 4 nœuds disponibles pour déployer notre solution SIRP.
 
-![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/2f305055-5c5d-4e1b-92be-1ebcafc67f85)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/221865a7-992a-438a-985e-875d95d30ad4)
 
 Illustration 8 - Modèle de cluster Kubernetes HA etcd stacked (kubernetes.io)
 
@@ -637,7 +637,7 @@ Wazuh peut fonctionner seul, mais il n'y aurait aucun endroit pour visualiser le
 
 Pour cela, un modèle est configuré pour utiliser Elasticsearch, et un plugin est installé dans Kibana pour permettre la visualisation et la gestion de Wazuh.
 
-![](https://hackmd.io/_uploads/H1rZ_vTK3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/8e30f9a3-584d-4e77-b477-6b19dbe5c1f9)
 
 Illustration 9 - Écran de connexion Wazuh-Kibana
 
@@ -647,7 +647,7 @@ L'apparence des écrans peut varier en fonction des versions des produits utilis
 
 Lorsque vous vous connectez à Wazuh-Kibana, nous vérifions la connectivité avec Elasticsearch, la disponibilité des index nécessaires, ainsi que la connexion avec le serveur Wazuh-API.
 
-![](https://hackmd.io/_uploads/B1eOo1OTF3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/c489c365-e4ab-418f-af93-2f65f98ebbb6)
 
 Illustration 10 - Écran des modules Wazuh
 
@@ -655,13 +655,13 @@ L'écran ci-dessus affiche la page d'accueil une fois connecté avec un utilisat
 
 Par défaut, tous les modules ne sont pas activés. Par exemple, si le module de vulnérabilité n'est pas activé, ce comportement peut être modifié en modifiant la configuration de l'agent pour activer ou désactiver les modules nécessaires.
 
-![](https://hackmd.io/_uploads/Sk4NlO6F2.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/8cf30f2a-b36e-4da2-8b55-57999bf5d770)
 
 Illustration 11 - Écran des agents Wazuh
 
 Dans notre cas, comme vous pouvez le voir, nous avons 4 agents disponibles et connectés, dont 2 sur des ordinateurs Linux et 2 sur des ordinateurs Windows. La version du système d'exploitation et son état sont indiqués, entre autres informations. Par exemple, l'une des fonctions des agents est d'obtenir l'inventaire des logiciels sur les ordinateurs gérés.
 
-![](https://hackmd.io/_uploads/SyEwe_aYh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/49ad1a82-c735-4c57-94c8-4ecf996bb073)
 
 Illustration 12 - Écran des événements de sécurité Wazuh
 
@@ -675,7 +675,7 @@ Kibana permet de visualiser des informations à l'aide de tableaux de bord ou d'
 
 Pour TheHive, notre outil de gestion des incidents, la première fois que nous y accédons, une option s'affiche pour mettre à jour la base de données du produit (Cassandra dans notre cas) afin de créer les structures et les données nécessaires pour commencer à travailler avec l'outil.
 
-![](https://hackmd.io/_uploads/HJu-tKaYn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/08c1516c-4d66-4337-8618-889348e434ef)
 
 Illustration 13 - Écran de connexion à TheHive
 
@@ -683,19 +683,19 @@ Une fois authentifiés dans l'outil, nous avons une organisation par défaut, qu
 
 La prochaine étape consiste à créer une organisation, dans notre cas, la société fictive à laquelle nous offrons nos services SOC ou CSIRT. Dans notre exemple, la société s'appelle MyHome Inc. Il suffit de donner un nom et une description à l'organisation.
 
-![](https://hackmd.io/_uploads/Sk8uYYpt3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/7d43fe34-a923-40f3-9b03-fda2709b93e1)
 
 Illustration 14 - Écran de création d'organisation dans TheHive
 
 Une fois l'organisation créée, nous pouvons déjà créer des utilisateurs au sein de cette organisation.
 
-![](https://hackmd.io/_uploads/ryBsYFat2.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/283f6592-801d-4bb7-b3e8-2ddf70bf24af)
 
 Illustration 15 - Écran des organisations dans TheHive
 
 Pour ce faire, nous pouvons suivre le lien du nom de notre nouvelle organisation, où nous aurons la possibilité de le faire.
 
-![](https://hackmd.io/_uploads/SkJyqtTYh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/b807a81e-0c24-41cc-bd38-030449126785)
 
 Illustration 16 - Écran des utilisateurs par organisation dans TheHive
 
@@ -709,7 +709,7 @@ Une fois que nous avons créé cet utilisateur, nous nous déconnectons de l'uti
 
 Avant cela, nous pouvons également accéder à l'option de configuration de l'interface utilisateur, où nous pouvons modifier le format de date (par défaut, il est au format MM/JJ/AA, mais nous pouvons le changer en JJ/MM/AA, qui est plus couramment utilisé dans notre pays, mais cela dépend des préférences personnelles). Nous pouvons également configurer l'affichage des cas une fois que nous nous connectons avec notre utilisateur d'organisation. J'ai laissé cette option par défaut.
 
-![](https://hackmd.io/_uploads/BkkEcK6th.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/6fcd7eec-6394-4b38-947f-6e29cb326ebe)
 
 Illustration 17 - Écran des cas dans TheHive
 
@@ -727,7 +727,7 @@ Certaines de ces options seront utilisées plus tard dans notre cas d'utilisatio
 
 En haut à droite, nous avons un menu "Organisation" à côté de notre nom d'utilisateur authentifié dans l'application. À partir de ce menu, nous pouvons accéder à la configuration des utilisateurs, des modèles, des tags personnalisés et de l'interface utilisateur.
 
-![](https://hackmd.io/_uploads/BkjDqYTKh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/2d4b4b32-45ab-4a8f-9b96-530dce14d2de)
 
 Illustration 18 - Écran des modèles de cas dans TheHive
 
@@ -739,7 +739,7 @@ Pour configurer l'accès de TheHive à Cortex ou MISP, nous devons ajouter l'URL
 
 Pour Cortex, notre image Docker vous permet de configurer la connexion à Cortex à l'aide de paramètres. C'est l'option que nous avons suivie, comme vous pouvez le voir sur l'écran suivant. En bas à droite, nous avons une icône qui indique en vert que nous avons une connectivité avec Cortex (en rouge en cas de problème). Nous pouvons également vérifier cela en cliquant sur l'utilisateur avec lequel nous sommes authentifiés dans l'application, puis en sélectionnant "À propos". En plus de nous donner les versions des logiciels, nous pouvons voir si la connexion avec Cortex est établie (indiqué par OK).
 
-![](https://hackmd.io/_uploads/H1f3cY6Fn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/f543ecda-f0e0-48fa-b5dc-33df35619378)
 
 Illustration 19 - Écran "À propos" et connexion entre TheHive et Cortex
 
@@ -747,19 +747,19 @@ Illustration 19 - Écran "À propos" et connexion entre TheHive et Cortex
 
 Une fois que la base de données est initialisée, comme dans TheHive, nous pouvons accéder à notre instance de Cortex. Nous visitons l'URL où l'écran de connexion devrait apparaître.
 
-![](https://hackmd.io/_uploads/HJUHiK6Kh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/b447b797-9a5c-4399-b519-1d6c007de4e5)
 
 Illustration 20 - Écran de connexion à Cortex
 
 Comme nous l'avons fait avec TheHive, la première étape consiste à créer une organisation. Dans notre cas, nous revenons à la société fictive MyHome Inc.
 
-![](https://hackmd.io/_uploads/SJdOiFpYn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/1b92efb0-dba4-467e-b5ea-4c8b1b97678c)
 
 Illustration 21 - Écran des organisations dans Cortex
 
 Maintenant que nous avons créé l'organisation, si nous cliquons dessus et suivons le lien, les utilisateurs nous apparaîtront. Par défaut, il n'y en a aucun, mais nous allons créer deux utilisateurs : un utilisateur avec tous les rôles, qui sera notre administrateur (nommé "Paola"), et un utilisateur avec les rôles "read" et "analyze", qui sera utilisé par TheHive pour interagir avec Cortex. Cet utilisateur n'a pas besoin de mot de passe, seule la clé d'API est nécessaire, comme nous l'avons mentionné précédemment lors de la configuration dans le fichier "application.conf".
 
-![](https://hackmd.io/_uploads/BkuiotTFh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/34ac905f-bf99-4c24-a61a-6a655c1a6d02)
 
 Illustration 22 - Écran des utilisateurs par organisation dans Cortex
 
@@ -771,7 +771,7 @@ Dans mon cas, j'ai quelques clés d'API (comme SHODAN) que j'ai en mode "Trial" 
 
 Avec plus de sources de renseignements et de meilleure qualité, nous pourrons obtenir des informations fiables et utiles pour les observateurs de nos cas dans TheHive.
 
-![](https://hackmd.io/_uploads/Sko0iFTK3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/af8e651d-b3f8-4214-9c1d-3510c5d761ff)
 
 Illustration 23 - Écran des paramètres des analyseurs dans Cortex
 
@@ -781,13 +781,13 @@ Dans notre cas, nous activerons certains analyseurs. Pour cela, il suffit de cli
 
 Parmi les analyseurs, nous en avons un que nous examinerons plus en détail dans la section suivante : MISP. C'est là que notre composant de plateforme SIRP entre en jeu.
 
-![](https://hackmd.io/_uploads/rJrfhKTth.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/f736300e-3c3f-413a-8c1e-8e0e8fc9b1ff)
 
 Illustration 24 - Écran de configuration de l'analyseur MISP dans Cortex
 
 Une fois les modules ou plugins que nous allons utiliser configurés, nous passons à la section suivante : "Analyzers". Il y en a 164 disponibles (qui utilisent les 81 configurations de paramètres mentionnées précédemment).
 
-![](https://hackmd.io/_uploads/SkNH3tTKn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e84a4876-6668-46b2-9fc3-196ddbd64daf)
 
 Illustration 25 - Écran d'activation/désactivation des analyseurs dans Cortex
 
@@ -795,7 +795,7 @@ Pour les activer, il suffit de cliquer sur "Enable" et un formulaire s'affiche p
 
 Ensuite, nous pouvons voir les paramètres pour notre analyseur MISP. Comme vous pouvez le voir sur l'image, certaines informations sont incomplètes en haut, mais les paramètres que nous avons déjà configurés apparaissent ainsi que les nouveaux paramètres mentionnés précédemment.
 
-![](https://hackmd.io/_uploads/SyYD2Kath.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/4d3cc30d-f68d-4393-980a-b6bd27431200)
 
 Illustration 26 - Écran d'activation de l'analyseur MISP dans Cortex
 
@@ -825,7 +825,7 @@ Chaque analyseur est spécialisé dans des domaines différents, tels que la ré
 
 Généralement, les analyseurs sont des programmes écrits en Python. Certains d'entre eux s'exécutent sous forme de conteneurs Docker, ce qui est courant pour les analyseurs et les répondeurs.
 
-![](https://hackmd.io/_uploads/ByxqnY6Fh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e8cbc765-8bba-4229-8523-55ebac57d77a)
 
 Illustration 27 - Écran de configuration des répondeurs dans Cortex
 
@@ -843,13 +843,13 @@ Un utilisateur Wazuh a donc été créé pour ce type de réponse. Nous nous ren
 
 Dans ce cas, étant donné qu'il s'agit d'un environnement simulé, nous avons configuré l'utilisateur avec le rôle "admin". Cependant, dans un environnement réel, il serait préférable de limiter les autorisations au strict minimum nécessaire. Dans ce cas, j'ai choisi cette configuration pour m'assurer que cela fonctionne plutôt que de passer du temps à tester différentes autorisations pour vérifier si elles sont suffisantes.
 
-![](https://hackmd.io/_uploads/rJ333Kpth.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/73886a2c-64c7-48d5-bd36-fc58a3369511)
 
 Illustration 28 - Écran des utilisateurs Wazuh
 
 Pour conclure, nous avons toujours considéré Cortex comme un allié de TheHive, mais il peut également être utilisé individuellement. En haut à gauche, nous pouvons voir l'option "New Analysis", qui nous permet de soumettre différents types de données (observables) à analyser par Cortex.
 
-![](https://hackmd.io/_uploads/HyzkTYptn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/59b3529e-25f5-4d7b-98e0-f7f8aa4be940)
 
 Illustration 29 - Écran de lancement de l'analyse dans Cortex
 
@@ -857,13 +857,13 @@ Illustration 29 - Écran de lancement de l'analyse dans Cortex
 
 Une fois le produit installé et opérationnel, nous avons une base de données vide, tout comme dans les cas précédents. Pour accéder au service, nous utilisons la console Web en suivant l'URL, où l'écran de connexion de MISP apparaît.
 
-![](https://hackmd.io/_uploads/r1QM0KaF3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/1a94e9b0-efbe-499b-9b3d-d79ac6828f75)
 
 Illustration 30 - Écran de connexion à MISP
 
 Nous nous connectons en tant qu'administrateur par défaut (admin@admin.test) et procédons à la création de notre organisation fictive, qui représente la société cliente pour laquelle notre plateforme SIRP fournit des services.
 
-![](https://hackmd.io/_uploads/ByiPCF6F2.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/46db289d-922e-4943-8d82-057b64d6e06b)
 
 Illustration 31 - Vue des organisations dans MISP
 
@@ -875,7 +875,7 @@ MISP offre de nombreuses options de configuration et d'actions sur le produit, m
 
 Ensuite, comme pour les autres composants, nous créons un utilisateur pour la nouvelle organisation et un utilisateur pour notre Cortex, afin de pouvoir travailler avec notre plateforme MISP via l'API.
 
-![](https://hackmd.io/_uploads/BJniRYpFh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/33fcf051-b8fa-412e-afb7-a3edaff92238)
 
 Illustration 32 - Écran des utilisateurs dans MISP
 
@@ -885,7 +885,7 @@ Nous nous déconnectons et nous connectons à l'application MISP avec notre nouv
 
 À ce stade, notre base de données est toujours vide. Nous devons donc lui donner du contenu. Pour cela, nous examinons notre liste de "Feeds".
 
-![](https://hackmd.io/_uploads/SykyC9pFn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/780932d4-181e-44c0-b54f-6faeafbe23d2)
 
 Illustration 33 - Écran de la liste des flux dans MISP
 
@@ -897,7 +897,7 @@ En dehors de cette liste de flux, il serait judicieux de se connecter et d'écha
 
 Ces flux peuvent être téléchargés à tout moment, comme le montrent les actions à côté de chaque flux dans la liste des événements. Cependant, vous devez également activer régulièrement ces mises à jour pour rester à jour avec les informations qui circulent dans le monde.
 
-![](https://hackmd.io/_uploads/Sywz0cpt3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/123c212d-4cef-4c92-9ae5-770b73f6719b)
 
 Illustration 34 - Écran de planification des tâches dans MISP
 
@@ -907,7 +907,7 @@ Vous pouvez programmer la fréquence d'exécution et l'heure de la première ex�
 
 Dans notre cas, nous voyons qu'une tâche sur deux est terminée. Nous pouvons vérifier comment cela s'est déroulé en accédant à l'option "Jobs".
 
-![](https://hackmd.io/_uploads/BJxsAc6th.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/9af4ad7d-1169-4dd1-9641-f6980ef962e8)
 
 Illustration 35 - Écran des tâches dans MISP
 
@@ -915,7 +915,7 @@ Apparemment, l'exécution du flux 1 semble fonctionner correctement, mais pour l
 
 En parlant d'erreurs, il est également intéressant de mentionner l'option "Server Settings and Maintenance" du même menu "Administration".
 
-![](https://hackmd.io/_uploads/ryL6RqpY3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/9eb44a94-386a-4f1e-9c89-d97e7eba8fb1)
 
 Illustration 36 - Écran des paramètres du serveur et de la maintenance dans MISP
 
@@ -923,13 +923,13 @@ C'est une sorte d'option d'auto-diagnostic du logiciel MISP. Elle permet égalem
 
 Enfin, pour conclure cette section, il est important de noter que MISP permet également de partager des informations avec notre environnement. Il est possible d'ajouter nos propres événements avec des informations IOC spécifiques à notre organisation. Nous pouvons utiliser les balises déjà créées pour les événements importés et créer nos propres balises pour mieux organiser les données que nous ajoutons depuis notre organisation.
 
-![](https://hackmd.io/_uploads/rJaZyopY3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/c4310b5a-f8da-4131-8647-0099ce0343a2)
 
 Illustration 37 - Écran de la liste des événements dans MISP
 
 Pour cela, nous pouvons utiliser le menu "Event Actions", où l'option "List Tags" nous permet également d'ajouter des balises. Dans notre cas, nous avons ajouté une balise "Manual" lorsqu'un analyste ajoute des informations à notre MISP manuellement.
 
-![](https://hackmd.io/_uploads/B1PIOiTK2.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/93c1db83-8dad-4850-86b8-78ae6750dcc1)
 
 Illustration 38 - Écran de la liste des balises dans MISP
 
@@ -943,7 +943,7 @@ En ce qui concerne la sortie des alertes, Elastalert offre plusieurs options, te
 
 Praeco est l'interface web qui facilite la configuration des alertes à l'aide de formulaires et affiche les métadonnées d'Elastalert.
 
-![](https://hackmd.io/_uploads/BJOFiipFn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/6c71de9b-49ee-44f7-b4da-d71a5e269991)
 
 Illustration 39 - Écran principal de Praeco
 
@@ -953,7 +953,7 @@ Lorsque vous accédez à la console Web de Praeco, vous remarquerez un menu sur 
 
 Dans le cadre de ce test, nous avons créé une règle appelée «SSH Failed Login». Cette règle interroge Elasticsearch pour rechercher plus de deux connexions SSH ayant échoué (ce nombre est trop faible pour générer une alerte réelle). Si la règle détecte un dépassement du seuil, une alerte est générée dans TheHive. Cette alerte peut ensuite être traitée en l'ajoutant à un cas ou en suivant le processus approprié que vous jugez le plus pratique.
 
-![](https://hackmd.io/_uploads/B1f2-2TKh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/ea4a3251-5f53-44ca-b001-7f294d3d38ce)
 
 Illustration 40 - Écran d'Alertes de TheHive (alertes créées par Elastalert)
 
@@ -965,13 +965,13 @@ Pour chaque règle, ces données peuvent être différenciées, y compris la pol
 
 Dans notre cas, la configuration de TheHive est également stockée dans un fichier situé dans le répertoire «Rules», qui a un rôle spécial. Ce fichier permet d'enregistrer l'URL et les informations d'accès, et peut ensuite être utilisé par toutes les règles. Il utilise la clé d'API de l'utilisateur «elastalert», comme nous l'avons vu dans la section de configuration de TheHive.
 
-![](https://hackmd.io/_uploads/ryeCMn6F3.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/8675b273-005a-4844-bac1-6b187af456ba)
 
 Illustration 41 - Écran de définition de règle dans Praeco
 
 En plus des étapes précédentes, il est essentiel de créer un utilisateur dans Elasticsearch et de lui attribuer les autorisations nécessaires pour créer et mapper les index requis pour utiliser Elastalert, ainsi que pour consulter les données sur lesquelles les alertes sont basées.
 
-![](https://hackmd.io/_uploads/B1inQhatn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/9c102a9c-2a10-4aae-a93d-198aa3574800)
 
 Illustration 42 - Écran des utilisateurs Elasticsearch (utilisateur "elastalert")
 
@@ -979,7 +979,7 @@ Dans la section "Internal Users" de Wazuh-Kibana, vous pouvez créer un autre ut
 
 Cela peut être fait via l'interface web de Wazuh-Kibana, où vous avez également la possibilité de créer un rôle pour attribuer les autorisations nécessaires à ce nouvel utilisateur.
 
-![](https://hackmd.io/_uploads/SyUgVnpYh.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/388bae17-b075-4c5d-92d2-49af5b57c883)
 
 Illustration 43 - Écran des rôles Elasticsearch (autorisations "elastalert")
 
@@ -1030,7 +1030,7 @@ Le scénario en question simule une possible attaque par force brute par un "ins
 
 7. Nous ajoutons un nouvel observable au cas et incluons l'adresse IP source provenant de l'alerte. Nous ajoutons également un tag et une description appropriés pour cet observable.
 
-![](https://hackmd.io/_uploads/HkRIrhaK2.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/19fac6a3-4581-4df8-a992-ad8167db2b00)
 
 8. Bien que nous sachions qu'il s'agit d'une adresse IP interne, nous essayons néanmoins de soumettre cette adresse IP à nos "analyseurs" disponibles dans Cortex. En cliquant sur l'adresse IP de l'observable, une liste des "analyseurs" Cortex disponibles est affichée.
 
@@ -1044,7 +1044,7 @@ Le scénario en question simule une possible attaque par force brute par un "ins
 
 13. Dans l'onglet "Observables", une icône en forme de roue dentée apparaît à droite, sous la section "Actions". Nous cliquons sur cette icône et sélectionnons "Wazuh" comme option de réponse.
 
-![](https://hackmd.io/_uploads/BJeiS2Tt2.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/b4b13167-8940-45e5-a7d5-fc255fe2bed8)
 
 14. Une fenêtre de confirmation apparaît, et nous cliquons sur "Yes, run it" pour confirmer l'exécution de l'action de réponse avec Wazuh.
 
@@ -1056,7 +1056,7 @@ Le scénario en question simule une possible attaque par force brute par un "ins
 
 18. Pour notre exemple de cas d'utilisation, nous procédons à la clôture de l'affaire et avons la possibilité de rédiger un résumé de l'incident pour archiver toutes les informations pertinentes et les actions prises dans le cadre de la réponse à cet incident.
 
-![](https://hackmd.io/_uploads/rJvOU2atn.png)
+![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/4569c8a7-3f6f-4e7c-adf5-61187009a2cc)
 
 ### Conclusions
 
