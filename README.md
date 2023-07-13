@@ -92,8 +92,10 @@ Un autre élément important est un NIDS ou NIPS pour la détection et la répon
 ### Wazuh
 
 Comme indiqué précédemment, Wazuh est une solution open source qui nous permet de surveiller nos appareils afin de détecter les menaces, l'intégrité de nos systèmes et de réagir aux incidents, entre autres (comme « compliance » pour vérifier que les ordinateurs respectent la politique de sécurité de l'entreprise).
+
 Pourquoi Wazuh ?
 Bien qu'il puisse y avoir d'autres options, il s'agit d'une suite qui intègre de multiples fonctionnalités qu'il serait autrement nécessaire de déployer avec différents composants logiciels et que nous n'aurions donc pas l'intégration que nous pouvons avoir avec ce produit. Il s'agit d'une solution avec un support communautaire suffisant (de nombreuses solutions apparaissent et disparaissent en peu de temps) et suffisamment mature pour être implémentée dans une organisation, ce qui est réalisé en publiant de nouvelles versions en dépannant les bugs et en ajoutant des fonctionnalités au produit (au moment de réaliser cette étude du produit, ils vont dans la version 4.4.1).
+
 Outre la communauté, il existe également une entreprise qui peut prendre en charge le produit, point important dans de nombreuses organisations sans lequel ils ne se lanceraient pas dans la mise en œuvre de cette solution, la société qui prend en charge le produit Wazuh Inc. 
 
 Deux services d'assistance sont disponibles :
@@ -101,21 +103,19 @@ Deux services d'assistance sont disponibles :
 •   Standard : 8x5 pendant les heures de bureau (réponse maximale dans 8 heures)
 •   Premium : 24x7 (réponse maximale en 4 heures)
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/9b78d9af-fd5a-4504-b48a-44caa62d0f6c)
-
 Illustration 1 - Fonctionnalités de l'agent Wazuh
 
 Ils ont également la possibilité d'être consommés en mode SaaS en souscrivant ce service à Wazuh Inc.
 Il s'agit d'un produit évolutif qui permet de le déployer dans une organisation quelle que soit sa taille à l'aide d'une structure client/serveur, les ordinateurs à protéger auraient la partie cliente dans ce cas (Wazuh Agent) et nous pouvons avoir un ou plusieurs serveurs (Wazuh Server), ils peuvent évoluer horizontalement pour recevoir des informations des agents, ainsi que pour leur configuration.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e18fb7d8-6bb0-4bb8-83d2-a478de6a73bf)
-
 Illustration 2 - Fonctionnalités Wazuh Server
 
 Il s'agit d'une plate-forme multiplateforme, ce qui est également important car les organisations peuvent être très hétérogènes à cet égard, bien que la plate-forme utilisateur prédominante soit généralement Windows, il y a aussi ceux qui choisissent Mac ou Linux, la partie serveurs ouvre encore plus l'éventail des possibilités (bien qu'aujourd'hui nous ayons principalement Linux et Windows), nous pouvons avoir notre Wazuh Agent à la fois sur Windows, Linux, Mac OS, AIX, Solaris et HP-UX.
+
 Vous avez plusieurs options de déploiement sur des solutions de type IaaS ou CaaS, dans le premier cas vous avez plusieurs options d'installation sur un seul serveur avec un OVA, nous avons le système d'exploitation et le logiciel préinstallé, est une solution rapide pour travailler immédiatement avec le produit, bien que non recommandée pour une organisation de taille moyenne/grande en fonction des performances, des instructions sont également disponibles pour l’installation de ses composants de manière distribuée et avec des automatismes puppet et ansible.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/589e5554-bf6a-4c28-9af2-2d79f4edfc61)
-
 Illustration 3 - Installation distribuée Wazuh
 
 En ce qui concerne son déploiement sur CaaS, nous pouvons le faire via Docker et Kubernetes, c'est donc une solution très flexible et qui s'adapte très bien au paysage des déploiements actuels de systèmes sur site au sein de l'organisation, dans les clouds publics, privés ou hybrides.
@@ -130,8 +130,10 @@ Voici un petit aperçu des principales fonctionnalités de Wazuh.
 
 Les événements générés par les agents Wazuh sont envoyés au serveur Wazuh où vous pouvez définir des alertes comme des alertes en fonction de leur gravité, par défaut à partir du niveau 3 une alerte est ignorée.
 Les agents ont également la capacité d'effectuer des réponses actives, le produit est livré avec quelques scripts pour effectuer certaines tâches de réponse telles que le blocage d'un accès avec le pare-feu local ou la création d'un chemin nul.
+
 Il est possible d'effectuer des tâches avec Wazuh sur des ordinateurs sans agent en utilisant la connexion SSH, tels que des routeurs, des pare-feu ou des commutateurs.
 Les règles de détection disponibles pour le produit sont gérées de manière centralisée à partir d'un référentiel Github et doivent être configurées pour être mises à jour en cas d'apparition de nouvelles règles ou vous pouvez ajouter vos propres règles pour améliorer les capacités de détection.
+
 Le produit peut être intégré par API avec d'autres systèmes :
 •      Slack : vous pouvez créer des messages dans slack pour publier des alertes
 •      PagerDuty : est un service SaaS pour incident response dans lequel vous pouvez créer un service pour publier des alertes dans votre Incident Dashboard
@@ -139,7 +141,9 @@ Le produit peut être intégré par API avec d'autres systèmes :
 •      Custom Integration : utilisé pour l'intégration avec des produits tiers, il s'agit d'une option générique qui permet l'intégration par script
 
 Il est possible d'accéder à Wazuh Server via le Web avec un navigateur ou d'interagir avec celui-ci via l'API Wazuh, une API RESTful qui permet de gérer le Wazuh, ainsi que d'effectuer diverses requêtes.
+
 L'intégration avec Kibana, comme indiqué ci-dessus est l'une des fonctionnalités de ce produit, dispose d'un plugin qui permet aux utilisateurs de visualiser et d'analyser les alertes Wazuh stockées sur Elasticsearch. Les utilisateurs peuvent obtenir des statistiques par agent, rechercher des alertes et les filtrer en utilisant différentes vues. S'intègre à l'API Wazuh pour récupérer des informations sur la gestion et la configuration des agents, des journaux, des règles définies, des groupes, etc.
+
 Parmi les autres fonctionnalités du produit, citons l'analyse des vulnérabilités basée sur les BDD CVE et la détection du logiciel installé, le Wazuh fait également l'inventaire, ainsi que le scan de compatibilité des stratégies et des paramètres de sécurité de l'ordinateur.
 
 ### Filebeat
@@ -147,7 +151,6 @@ Parmi les autres fonctionnalités du produit, citons l'analyse des vulnérabilit
 Il s'agit d'un agent léger qui vous permet de transférer et de centraliser des données de journaux. Il surveille les fichiers configurés et permet de les envoyer à Elastichsearch ou Logstash pour indexation.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/87d894a9-07f7-4983-9bb9-78613adff3d6)
-
 Illustration 4 - Surveillance et envoi des journaux
 
 Pour collecter ces journaux, vous devez installer cet agent sur chacun des ordinateurs que vous voulez surveiller et envoyer des journaux à notre SIEM et configurer les fichiers à partir desquels vous voulez recueillir des informations.
@@ -156,7 +159,7 @@ Vous devez également indiquer le format de ces journaux, afin que vous puissiez
 
 Nous disposons de versions pour Windows et Linux, la dernière version disponible est la version 7.12 au moment de l'exécution de ce travail d'analyse. Il peut également être installé sur Docker.
 
-###Winlogbeat
+### Winlogbeat
 
 Son rôle est similaire à celui de l'agent Filebeat que nous avons vu au point précédent, bien qu'il s'agisse ici d'un composant spécifique de systèmes Windows, car il vous permet de collecter et d'envoyer les informations générées dans le journal des événements de ce S.O.
 Bien qu'il puisse être utile de disposer de tous les événements Windows centralisés dans Elastic dans notre cas, nous nous concentrerons sur ceux du journal des événements de sécurité.
@@ -167,23 +170,23 @@ Cet agent est installé sur les plates-formes Linux et vous permet d'extraire de
 
 De cette façon, nous pouvons envoyer des données sur les actions réalisées par les utilisateurs sur le S.O. Linux à la plateforme SIEM.
 
-###Packetbeat
+### Packetbeat
 
 Il s'agit de la dernière des « beats » à analyser pour notre plateforme SIRP en tant qu'élément de collecte d'informations réseau.
 Cet agent vous permet de surveiller le trafic réseau et d'analyser en temps réel les paquets envoyés ou reçus par un hôte ou un conteneur et de les envoyer à Logstash ou Elasticsearch.
 Cette fonctionnalité peut être très utile sur notre plate-forme si nous ne pouvons pas avoir un NIDS ou un NIPS dans tous les emplacements réseau de notre organisation et peut nous permettre d'analyser le trafic réseau entre les ordinateurs de notre réseau local, trafic que nous ne ferons généralement pas passer par un NIDS ou un NIPS.
 Packetbeat peut analyser les paquets et décoder les données au niveau de l'application HTTP, DNS, etc. en donnant quelques exemples de protocoles de couche 7.
 
-###Logstash
+### Logstash
 
 C'est un composant de la suite de produits Elastic qui permet la réception de journaux, le sablage et la transformation en temps réel, indépendamment de leur format ou de leur complexité. Dans notre cas, il est utilisé pour envoyer les données à Elasticsearch, mais la sortie de données peut être autre, envoi par courrier, bbdd, etc.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/604461db-e734-440b-a487-b0cb0b1dca69)
- 
 Illustration 5 - Billets / Sorties Logstash
+
 Installable sur Linux, Windows, MacOS ou dans Docker
 
-###Fonctionnalités Logstash
+### Fonctionnalités Logstash
 
 Entrées : Entrées facilement à partir de vos journaux, métriques, applications Web, entrepôts de données.
 Filtres : vous pouvez configurer des filtres personnalisés, même si le produit dispose déjà d'une bibliothèque de modèles.
@@ -210,17 +213,19 @@ L'outil est centré sur la recherche, il permet des recherches structurées et n
 
 Actuellement, la dernière version disponible du produit est la version 7.12 et peut être installée sur Linux, Windows ou MacOS, ainsi que sur la technologie de conteneur Docker.
 
-###Fonctionnalités d'Elasticsearch
+### Fonctionnalités d'Elasticsearch
 
-Il permet la gestion des nœuds dans « Data tiers », il est possible de configurer les nœuds en fonction des performances des nœuds dans trois catégories Hot, Warm et Cold et il permet d’automatiser le déplacement des données entre les nœuds, bien que nous ne l’utilisions pas pour ce module de gestion du trafic sécurisé, dans un véritable SIEM, nous pourrions enregistrer les journaux les plus récents sur des nœuds de type Hot, où la recherche doit être en temps réel et où les données les plus anciennes pourraient être reléguées à des nœuds de stockage à faible coût de type Cold, par exemple, ce qui peut être nécessaire dans les organisations qui ont besoin de stocker des journaux pendant de longues périodes en raison d’exigences légales
+Il permet la gestion des nœuds dans « Data tiers », il est possible de configurer les nœuds en fonction des performances des nœuds dans trois catégories Hot, Warm et Cold et il permet d’automatiser le déplacement des données entre les nœuds, bien que nous ne l’utilisions pas pour ce module de gestion du trafic sécurisé, dans un véritable SIEM, nous pourrions enregistrer les journaux les plus récents sur des nœuds de type Hot, où la recherche doit être en temps réel et où les données les plus anciennes pourraient être reléguées à des nœuds de stockage à faible coût de type Cold, par exemple, ce qui peut être nécessaire dans les organisations qui ont besoin de stocker des journaux pendant de longues périodes en raison d’exigences légales.
 
 De nombreuses fonctionnalités du produit sont disponibles pour les duplications, snapshots, etc., en tant que bon produit à utiliser dans un environnement d'entreprise sérieux, vous avez de multiples options pour maintenir les performances et la disponibilité, nous ne traiterons pas ces fonctionnalités ici car l'utilisation du produit que nous ferons dans ce TFM ne fera que gratter la surface.
 
 Il dispose également d'un ensemble de fonctionnalités de sécurité, nécessaires pour ce type de produits qui peuvent contenir des données sensibles, l'une des choses de base est qu'un bon contrôle d'accès est nécessaire (l'outil fournit des mécanismes RBAC et ABAC pour affiner l'accès aux différentes ressources stockées dans Elastic) et enregistre un journal d'audit des accès corrects ou erronés pour pouvoir détecter les attaques. Un autre point important est le cryptage des données, si possible dans les communications avec Elasticsearch, ce qui serait le cryptage des données locales qui serait délégué au S.O. des nœuds.
 
 Une autre fonctionnalité de sécurité disponible pour le produit est le filtrage IP, vous pouvez appliquer le filtrage IP aux clients d'application, aux clients de nœud ou clients de transport, ainsi que d'autres nœuds qui tentent de joindre le cluster Elastic.
+
 En ce qui concerne l'authentification, il existe plusieurs méthodes pour la gérer : native, LDAP, SAML, etc. et permet d'utiliser SSO avec Kibana (il n'est pas nécessaire d'utiliser différents utilisateurs/passwords lors de l'accès via Kibana ou directement à Elasticsearch).
 Elasticsearch permet de définir des alertes et dispose d'un large éventail de notifications possibles : email, webhooks, IBM Resilient, Jira, Microsoft Teams, Slack, etc.
+
 Le produit fournit une API RESTful et JSON puissantes, ce qui permet l'accès au produit via du code d'application dans plusieurs langages Java, Go, .NET, PHP, Javascript, Perl, Python, Ruby, etc.
 Vous disposez d'autres fonctionnalités que vous pouvez consulter sur le site Web du produit, mais que nous ne détaillerons pas dans ce document.
 
@@ -234,7 +239,7 @@ Dans notre cas, il nous permettra de visualiser les données collectées dans El
 
 Comme le reste de la suite ELK est disponible pour Linux, Windows et MacOS et la plate-forme de conteneurs Docker.
 
-Capacités de Kibana
+### Capacités de Kibana
 
 Comme cela a déjà été dit, la principale capacité du produit est l'affichage des données.
 
@@ -270,7 +275,7 @@ Au moment de cette étude, la dernière version disponible est la version 4.1.0 
 
 Le produit peut être implanté sur une machine physique ou virtuelle (IaaS) ou contaminé par Docker (CaaS).
 
-###Capacités de TheHive
+### Capacités de TheHive
 
 Comme résumé sur le site du projet TheHive, voici les fonctionnalités de base du produit.
 
@@ -290,7 +295,7 @@ Collaboration :
 
 •      Les analystes peuvent enregistrer leur progression, joindre des preuves ou des fichiers notables, ajouter des balises et importer des fichiers ZIP protégés par mot de passe contenant des programmes malveillants ou des données suspectes sans les ouvrir.
 
-Action :
+### Action :
 
 •      Ajoutez un, des centaines ou des milliers d'observateurs à chaque cas que vous créez ou importez directement à partir d'un événement MISP ou de toute alerte envoyée à la plateforme.
 
@@ -316,7 +321,7 @@ Bien que Cortex soit free, cela ne signifie pas que les analyseurs et les répon
 Cortex peut être utilisé de manière autonome en utilisant son « interface » Web ou en association avec la plateforme de gestion des incidents TheHive, comme indiqué ci-dessus, il permet d'automatiser et d'exécuter simultanément des analyseurs et des répondeurs pour plusieurs cas.
 
 
-Analyseurs/répondeurs :
+### Analyseurs/répondeurs :
 
 •      Vous disposez d'un grand nombre d'analyseurs ou vous pouvez créer vos propres analyseurs, ainsi que des répondeurs utilisant n'importe quel langage de programmation qui peut courir sur Linux.
 
@@ -324,7 +329,7 @@ Analyseurs/répondeurs :
 
 •      Permet d'interroger plusieurs instances MISP (composant que nous aborderons plus tard).
 
-Interaction :
+### Interaction
 
 •      TheHive peut se connecter à une ou plusieurs instances de Cortex et peut analyser un grand nombre d'observables à la fois, ainsi que donner des réponses actives.
 
@@ -334,7 +339,7 @@ Interaction :
 
 •      Cortex peut interagir avec d'autres produits via son API REST ou via Cortex4py.
 
-Exécution :
+### Exécution :
 
 •      Cortex est livré avec plus d'une centaine d'analyseurs pour les services populaires tels que VirusTotal, Joe Sandbox, DomainTools, PassiveTotal, Google Safe Browsing, Shodan et Onyphe. Identifiez les contacts abusifs, analysez les fichiers dans différents formats tels que OLE et OpenXML pour détecter les macros VBA, générez des informations utiles dans les fichiers PE, PDF et bien plus encore.
 
@@ -354,7 +359,7 @@ Au moment de cette analyse, la plus grande version de MISP est la version 2.4, p
 
 L'une des principales réalisations de cet outil a été son utilisation généralisée et le partage des informations entre les organisations.
 Les attaques perpétrées par des cybercriminels, et même encouragées ou soutenues à des degrés divers par les États, augmentent en nombre et en sophistication, ce qui exige que les organisations travaillent également ensemble pour se protéger contre ces menaces et que MISP est un outil qui encourage ce type d'interaction de manière automatisée, en partageant l'intelligence que chaque organisation obtient après avoir analysé et enquêté sur une attaque.
-Sur le site de MISP, nous pouvons trouver ses fonctionnalités [11] :
+Sur le site de MISP, nous pouvons trouver ses fonctionnalités  :
 
 •      Il vous permet de disposer d'une base de données d'indicateurs et d'IoCs qui vous permet de stocker des informations techniques et non techniques sur les programmes malveillants, les incidents, les agresseurs et le renseignement.
 
@@ -406,7 +411,7 @@ Après avoir analysé les différents composants qui pourraient faire partie d'u
 
 Tout d'abord, nous définirons les cas d'utilisation que notre plate-forme aura, ce qui facilitera le choix des composants, cela ne signifie pas que la plate-forme ne pourra pas répondre à d'autres cas d'utilisation, mais ils ne seront pas traités dans ce TFM.
 
-#### Cas d’utilisation
+### Cas d’utilisation
 
 Les cas d'utilisation proposés pour ce TFM consistent en plusieurs caractéristiques de gestion des incidents qui testent les différents éléments de notre plateforme.
 
@@ -423,9 +428,7 @@ Pour la présentation et la défense du TFM, un des trois cas d'utilisation est 
 ### Composants de la solution
 
 Il s'agirait des composants de notre plateforme SIRP, qui comprend, comme déjà traité, les éléments de détection et de réponse, la gestion des événements et les journaux de sécurité, ainsi que la gestion des incidents avec intégration avec des automatismes de traitement des observateurs d'incidents, ainsi que les réponses aux incidents pour améliorer la phase d'endiguement.
-Nous incluons également un élément qui nous permet de partager et de collaborer avec d'autres organisations avec nos incidents analysés, déjà étudiés et
-
-travailler et aussi enrichir nos cas avec les informations que nous pouvons recueillir.
+Nous incluons également un élément qui nous permet de partager et de collaborer avec d'autres organisations avec nos incidents analysés, déjà étudiés et travailler et aussi enrichir nos cas avec les informations que nous pouvons recueillir.
 
 •      Wazuh
 
@@ -444,10 +447,14 @@ travailler et aussi enrichir nos cas avec les informations que nous pouvons recu
 •      MISP
 
 En ce qui concerne certaines décisions qui ont été prises pour choisir les composants, dans le cas du NIPS, Snort et Suricata ont été étudiés et on pourrait dire qu'ils sont les leaders de cette fonctionnalité dans le logiciel open source.
+
 Suricata a été choisi pour la mise en œuvre pour plusieurs raisons, c'est un logiciel plus récent et il a un design de code plus moderne (il est né multithread), ce qui améliore généralement les performances. Selon sa documentation, Snort semble fonctionner en mode multithread, à partir de la version 3 (il était auparavant possible de l'utiliser de cette manière en démarrant plusieurs instances), un paramètre est maintenant intégré pour cela.
+
 Les règles de Snort peuvent également être utilisées dans Suricata, dans ce type de logiciel en plus des capacités propres du produit, sa capacité de détection dépend de ses règles pour être meilleur dans la détection des menaces.
 D'un autre côté, je l'ai également choisi pour des références d'intégration de Wazuh, comme de MISP.
+
 Elastalert a également été inclus mais n'a pas été expliqué en détail dans ce chapitre pour la génération d'alertes et la création de cas dans TheHive, bien que l'exigence étant la génération de cas pour l'enquête sur les incidents dans TheHive il soit possible d'utiliser également l'option qui inclut ce produit TheHive4py, donc nous avons temporairement inclus le composant, mais nous verrons finalement quelle est la meilleure option lors de la phase de mise en œuvre et d'intégration.
+
 Les autres composants de la solution ont été choisis en fonction des cas d'utilisation qu'il est proposé de traiter avec cette plate-forme SIRP.
 
 ### Conception de la solution
@@ -455,16 +462,16 @@ Les autres composants de la solution ont été choisis en fonction des cas d'uti
 La solution pour notre plate-forme SIRP consiste à déployer les composants mentionnés ci-dessus comme s'il s'agissait d'un service de Cloud computing (SOCaaS), il s'agirait de fournir à nos clients potentiels une plate-forme complète de gestion des incidents de sécurité sur laquelle ils pourraient travailler en tant qu'utilisateurs ou déléguer entièrement à nous (votre fournisseur de services SOC et la plate-forme associée) pour effectuer toutes les tâches.
 
 Dans ce cas, et pour simuler un environnement réel, nous aurons besoin d'éléments supplémentaires qui n'ont pas été mentionnés précédemment parce qu'ils ne font pas partie de la solution SIRP en tant que telle, comme la nécessité de disposer d'une connexion VPN entre notre site cloud et l'entreprise ou l'organisation à laquelle nous gérerons votre sécurité avec notre plateforme.
+
 Les éléments de détection et de réponse nécessaires, tels que les agents Wazuh et les IPS, doivent être localisés sur le réseau de l'entreprise desservie par cette plateforme SIRP, ainsi que les accès nécessaires pour gérer l'installation, la réception des journaux sur la plateforme SIEM incluse dans notre solution SIRP et les autorisations permettant d'exécuter les scripts de réponse en fonction du type d'alerte détecté, le cas échéant.
 Le schéma logique de la solution et de ses composants est présenté ci-dessous.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e1966a81-5b9e-492c-ad0c-53fa00813f0f)
-
 Illustration 7 - Schéma logique des composants
 
 ## Mise en œuvre
 ### Options de déploiement
-
+ATTENTION RELIRE 
 Une fois que vous avez déterminé les composants qui constituent la solution, vous devez maintenant prendre des décisions concernant la mise en œuvre. Le déploiement nécessite une haute disponibilité et une solution évolutive, ce qui nécessite un haut composant d'automatisation.
 
 Les machines physiques ont été rejetées directement parce que je ne dispose pas d'équipements suffisants pour simuler un environnement d'exploitation. La solution sera basée sur des machines virtuelles, dans mon cas en utilisant VirtualBox, mais la solution de virtualisation a priori est indifférente au montage à effectuer.
@@ -503,13 +510,19 @@ Il existe une solution pour les conteneurs pour Wazuh, Elasticsearch (OpenDistro
 ### Installation au-dessus de Kubernetes
 
 À ce stade, nous avons déjà une solution pour pouvoir déployer automatiquement les composants d'application en adaptant les « recettes » aux différents équipements, comme cela a déjà été dit au point précédent, mais pour faire une véritable orchestration des composants, nous avons Kubernetes.
-Kubernetes (communément appelé k8s), comme indiqué sur votre site Web, est une plateforme portable et extensible open source pour la gestion des charges de travail et des services, tout comme avec l'option Docker-Compose, vous avez une manière déclarative de gérer le déploiement des composants (microservices), en exécutant le deploy des PODs et services nécessaires au fonctionnement de l'application ou du produit. Et tout cela, grâce à un environnement de gestion APIfigé.
+
+Kubernetes (communément appelé k8s), comme indiqué sur internet, est une plateforme portable et extensible open source pour la gestion des charges de travail et des services, tout comme avec l'option Docker-Compose, vous avez une manière déclarative de gérer le déploiement des composants (microservices), en exécutant le deploy des PODs et services nécessaires au fonctionnement de l'application ou du produit. Et tout cela, grâce à un environnement de gestion APIfigé.
+
 Ce projet a été lancé par Google en 2014 et a depuis été popularisé au point qu'il existe plusieurs versions qui implémentent kubernetes (kubeadm, minikube, kops, etc.), chacune a des fonctionnalités de base communes (par exemple les commandes), mais elles se différencient ensuite entre les composants de base de la solution et l'application de celle-ci (par exemple minikube est généralement utilisé dans des environnements monomodes et/ou pour tester la technologie kubernetes, bien qu'il s'agisse d'une solution 100 % opérationnelle).
+
 Kubernetes est une solution tellement flexible qui permet la portabilité entre différents fournisseurs de Cloud public (Azure, AWS, GCP, etc.) ou Cloud privé (on-premise). Il s'agit d'une plate-forme qui tente de renforcer les méthodologies agiles et le DevOps, qui est conçu pour prendre en charge le CI/CD.
+
 Dans notre cas, nous utiliserons Docker comme plate-forme de conteneurs, mais c'est une solution tellement flexible qu'elle est a priori indépendante de la plate-forme de conteneurs choisie (CRI, Containerd ...), de multiples outils de gestion, addons, etc.
+
 Nous avons également discuté précédemment du concept de POD, qui est l'unité minimale de Kubernetes qui serait comme une enveloppe d'un ou plusieurs conteneurs qui remplissent certaines caractéristiques.
 
 Une fois la technologie introduite, nous allons à notre étude de cas qui est la plate-forme SIRP avec les composants déjà mentionnés. Il existe de la documentation sur l'installation de Wazuh / Elasticsearch sur la plate-forme k8s, pour tous les autres composants, bien qu'il puisse y avoir une solution au niveau de la communauté open source, ce qui peut être basé sur les implémentations effectuées directement dans Docker ou Docker-Compose pour développer notre propre recette d'installation à partir des images déjà disponibles (TheHive, Cortex et MISP).
+
 Ainsi, avec ce système de déploiement, nous pouvons avoir une solution avec une haute disponibilité, évolutivité et automatisation dans le déploiement et la maintenance.
 
 ### Solution d'installation choisie
@@ -527,7 +540,6 @@ Les nœuds maîtres, car nous pourrions dire qu'ils sont des nœuds de gestion d
 Pour des raisons de sécurité, le déploiement d'applications ou d'autres composants sur les nœuds maîtres doit être désactivé. Nous disposerons donc de 4 nœuds efficaces pour déployer notre solution SIRP.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/2f305055-5c5d-4e1b-92be-1ebcafc67f85)
-
 Illustration 7 - HA kubernetes etcd stacked (kubernetes.io)
 
 Il existe deux modèles pour monter HA de Kubernetes avec kubeadm, le modèle topologique de l'image qui est suivi dans ce projet «etcd stacked» et le modèle «etcd external».
@@ -540,13 +552,13 @@ Toute la solution s'articule autour de 4 ordinateurs physiques dotés de process
 
 ### Plate-forme SIRP (simulation Cloud On-premise)
 
-Les ressources utilisées dans la simulation de Cloud On-premise ou Cloud Privé sont les suivantes :
+Les ressources utilisées dans la simulation de Cloud On-premise ou Cloud Privé sont les suivantes:
 
-•      1 machine virtuelle - Pare-feu Pf-Sense (2 vCPU, 4 Go de RAM et Go d'espace disque) Logiciel :
+•    1 machine virtuelle - Pare-feu Pf-Sense (2 vCPU, 4 Go de RAM et Go d'espace disque) Logiciel:
 
 Appliance Pf-Sense (basée sur FreeBSD)
 
-•      7 machines virtuelles - Cluster Kubernetes :
+•    7 machines virtuelles - Cluster Kubernetes:
 
 3 VMs nœuds Master (2 vCPU et 4 Go de RAM et 100 Go de disque) ou 4 VMs nœuds Worker (2 vCPU et 8 Go de RAM et 100 Go de disque)
 
@@ -559,3 +571,109 @@ ou Docker-Compose 1.29.1
   •  Opendistro Elasticsearch 1.12.0 (Elasticsearch et Kibana 7.10) ou Filebeat 7.10
 ou TheHive 4.1.4 ou Cortex 3.1.1 ou MISP 2.4.142
 
+### Réseau Entreprise
+
+Les ressources utilisées dans le réseau d'entreprise sont les suivantes :
+
+•	1 machine virtuelle - Pare-feu Pf-Sense (2 vCPU, 4 Go de RAM et Go d'espace disque) Logiciel :
+
+• Appliance Pf-Sense (OVA basée sur FreeBSD)
+
+•	1 machine virtuelle - Logiciel Suricata (IPS) :
+
+• S.O. CentOS 8.3 ou Suricata 5.0.6
+
+• Wazuh Agent 4.1.5
+
+•	1 machine virtuelle - DNS externe, Proxy Utilisateurs, Proxy Revers Software :
+
+• S.O. CentOS 8.3 ou Bind 9.11
+
+• Apache 2.4.37 o Squid 4.4
+
+• Wazuh Agent 4.1.5
+
+•	1 machine virtuelle - Web Server, App. Server et BBDD Software :
+
+• Appliance BWA (Ubuntu-based OVA)
+ 
+•	1 machine virtuelle - Domain Controller AD et DNS interne Software :
+
+ou Windows Server 2019 ou Sysmon v13.20
+
+• Wazuh Agent 4.1.5
+
+•	1 machine virtuelle - Stations de travail Logiciel :
+
+ou Windows 10
+
+• Wazuh Agent 4.1.5
+
+### Dimensionnement des composants
+
+Bien qu'il s'agisse d'un environnement simulé pour vous permettre de le rendre aussi réel que possible et de montrer les possibilités d'évolutivité des composants de notre plate-forme SIRP, le dimensionnement suivant a été effectué.
+
+•	1 nœud wazuh-master et 2 nœuds wazuh-workers
+
+•	3 elasticsearch nodes
+
+•	1 kibana
+
+•	1 TheHive
+
+•	1 Cortex
+
+•	1 MISP
+
+•	1 Praeco-Elastalert
+
+Dans un environnement réel, si ce n'est pas suffisant, vous pouvez résoudre ce problème en ajoutant des nœuds si le problème concerne la capacité du processeur ou de la mémoire, ou en ajoutant de l'espace disque (qui dépend du nombre d'événements à enregistrer dans Elastic, du nombre d'agents, etc.).
+ 
+Installé sur des lubernetes, nous pouvons « jouer » avec les réplicas et ajouter plus de pods à chaque deploy.
+
+Dans le cas de TheHive, Cortex et MISP, il n'y a pas eu de répliques des produits, car selon la documentation des différents projets, notamment le cas de The Hive et Cortex nécessitent beaucoup de ressources et donc, comme il n'y a plus de matériel disponible, une installation minimale a été effectuée pour pouvoir utiliser les produits.
+
+### Intégration
+
+
+Jusqu'à présent, les composants qui constituent notre plate-forme SIRP ont été installés, il s'agit maintenant de les configurer et de les intégrer.
+
+La configuration de chaque produit, en utilisant toutes ses possibilités, pourrait nous prendre beaucoup de temps. Par conséquent, les configurations minimales nécessaires ont été effectuées pour pouvoir les rendre opérationnels et effectuer les tâches nécessaires au cas d'utilisation que nous exposerons plus tard.
+
+### Wazuh-Elasticsearch-Kibana
+
+Une fois l'installation terminée, le produit est opérationnel, c'est-à-dire qu'une fois les pods déployés, les configurations appliquées et les données initialisées, la configuration de base pour son fonctionnement est déjà implémentée car il s'agit d'une suite de produits configurée de base pour être intégrée au processus d'installation et d'activation des composants.
+
+Wazuh pourrait fonctionner seul, mais nous n'aurions pas d'endroit où visualiser les informations qu'il nous rapporte sans élasticsearch et kibana, il peut fonctionner via une API, mais c'est plus utile pour les intégrations avec d'autres applications ou pour le développement de soi. Avec Kibana, nous pouvons l'exploiter de manière plus pratique et visuelle via internet.
+
+Pour ce faire, un modèle est configuré pour utiliser elasticsearch et un plugin est installé qui est utilisé à partir de Kibana pour vous permettre de visualiser et de gérer notre Wazuh.
+
+![](https://hackmd.io/_uploads/H1rZ_vTK3.png)
+Illustration 9 - Écran Login Wazuh-Kibana
+
+Comme vous pouvez le voir dans l'image ci-dessus, l'écran Login de Kibana est personnalisé par Wazuh, une fois que vous avez saisi le Login et le Password qui est créé pendant le processus d'installation (dans ce cas, dans l'Elasticsearch), car comme il a été commenté, il visualise les informations stockées dans ce logiciel et opère également contre le Wazuh Server via l'API, pour lequel il utilise ce oui par un autre utilisateur, étant donné qu'il est également inscrit lors du processus d'installation dans le produit Wazuh.
+
+Le look & feel des écrans peut varier en fonction des versions des produits utilisés.
+
+Lorsque vous vous connectez à notre Wazuh-Kibana, nous vérifions si vous avez une connectivité avec Elasticsearch, si les index nécessaires sont disponibles, ainsi que la connectivité mentionnée ci-dessus et la connexion avec le Wazuh-API Server.
+
+![](https://hackmd.io/_uploads/B1eOo1OTF3.png)
+Illustration 10 - Écran Wazuh Modules
+
+L'écran ci-dessus affiche la page d'accueil une fois authentifiée avec un utilisateur valide, où les modules Wazuh sont affichés, bien qu'il rapporte des données de fonctionnement, il ne s'agit pas d'informations sur les conteneurs où sont situés les différents composants, il ne commence à être utile que lorsque nous avons des agents qui rapportent des informations.
+
+Par défaut, tous les modules ne sont pas activés, sans entrer dans les détails, par exemple, si la vulnérabilité est l'un des modules non actifs, ce comportement peut être modifié en modifiant la configuration de l'agent, en activant ou en désactivant les modules dont nous avons besoin.
+
+![](https://hackmd.io/_uploads/Sk4NlO6F2.png)
+Illustration 11 - Écran Wazuh Agents
+
+Dans notre cas, comme vous pouvez le voir, nous avons 4 agents disponibles et connectés, deux sur des ordinateurs Linux et deux autres sur des ordinateurs Windows, la version du système d'exploitation et son état sont indiqués entre autres. Par exemple, l'une des fonctions des agents consiste à obtenir l'inventaire des logiciels sur les ordinateurs gérés.
+
+![](https://hackmd.io/_uploads/SyEwe_aYh.png)
+Illustration 12 - Écran Wazuh Modulo Security events
+
+Dans Security Events, nous pouvons voir que l'agent qui signale de loin le plus d'informations sur les événements est le serveur Windows qui est un contrôleur de domaine, cela ne signifie évidemment pas que nous avons un problème, simplement qu'il a plus d'activité au niveau des événements de sécurité.
+
+C'est le travail de l'analyste de la sécurité, d'effectuer des recherches et de définir des alertes sur les comportements qui peuvent constituer une menace ou même provoquer un incident.
+
+Kibana vous permet de visualiser des informations à l'aide de tableaux de bord ou de faire des recherches sur les données contenues dans Elasticsearch, Wazuh et ses modules ont déjà créé des tableaux de bord, mais il existe des options pour créer tous les tableaux de bord nécessaires, comme vous le savez déjà, ils peuvent être très utiles, car en général nous traitons mieux les informations de manière visuelle.
