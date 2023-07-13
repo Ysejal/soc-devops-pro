@@ -103,12 +103,14 @@ Deux services d'assistance sont disponibles :
 •   Standard : 8x5 pendant les heures de bureau (réponse maximale dans 8 heures)
 •   Premium : 24x7 (réponse maximale en 4 heures)
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/9b78d9af-fd5a-4504-b48a-44caa62d0f6c)
+
 Illustration 1 - Fonctionnalités de l'agent Wazuh
 
 Ils ont également la possibilité d'être consommés en mode SaaS en souscrivant ce service à Wazuh Inc.
 Il s'agit d'un produit évolutif qui permet de le déployer dans une organisation quelle que soit sa taille à l'aide d'une structure client/serveur, les ordinateurs à protéger auraient la partie cliente dans ce cas (Wazuh Agent) et nous pouvons avoir un ou plusieurs serveurs (Wazuh Server), ils peuvent évoluer horizontalement pour recevoir des informations des agents, ainsi que pour leur configuration.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e18fb7d8-6bb0-4bb8-83d2-a478de6a73bf)
+
 Illustration 2 - Fonctionnalités Wazuh Server
 
 Il s'agit d'une plate-forme multiplateforme, ce qui est également important car les organisations peuvent être très hétérogènes à cet égard, bien que la plate-forme utilisateur prédominante soit généralement Windows, il y a aussi ceux qui choisissent Mac ou Linux, la partie serveurs ouvre encore plus l'éventail des possibilités (bien qu'aujourd'hui nous ayons principalement Linux et Windows), nous pouvons avoir notre Wazuh Agent à la fois sur Windows, Linux, Mac OS, AIX, Solaris et HP-UX.
@@ -116,6 +118,7 @@ Il s'agit d'une plate-forme multiplateforme, ce qui est également important car
 Vous avez plusieurs options de déploiement sur des solutions de type IaaS ou CaaS, dans le premier cas vous avez plusieurs options d'installation sur un seul serveur avec un OVA, nous avons le système d'exploitation et le logiciel préinstallé, est une solution rapide pour travailler immédiatement avec le produit, bien que non recommandée pour une organisation de taille moyenne/grande en fonction des performances, des instructions sont également disponibles pour l’installation de ses composants de manière distribuée et avec des automatismes puppet et ansible.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/589e5554-bf6a-4c28-9af2-2d79f4edfc61)
+
 Illustration 3 - Installation distribuée Wazuh
 
 En ce qui concerne son déploiement sur CaaS, nous pouvons le faire via Docker et Kubernetes, c'est donc une solution très flexible et qui s'adapte très bien au paysage des déploiements actuels de systèmes sur site au sein de l'organisation, dans les clouds publics, privés ou hybrides.
@@ -151,6 +154,7 @@ Parmi les autres fonctionnalités du produit, citons l'analyse des vulnérabilit
 Il s'agit d'un agent léger qui vous permet de transférer et de centraliser des données de journaux. Il surveille les fichiers configurés et permet de les envoyer à Elastichsearch ou Logstash pour indexation.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/87d894a9-07f7-4983-9bb9-78613adff3d6)
+
 Illustration 4 - Surveillance et envoi des journaux
 
 Pour collecter ces journaux, vous devez installer cet agent sur chacun des ordinateurs que vous voulez surveiller et envoyer des journaux à notre SIEM et configurer les fichiers à partir desquels vous voulez recueillir des informations.
@@ -182,6 +186,7 @@ Packetbeat peut analyser les paquets et décoder les données au niveau de l'app
 C'est un composant de la suite de produits Elastic qui permet la réception de journaux, le sablage et la transformation en temps réel, indépendamment de leur format ou de leur complexité. Dans notre cas, il est utilisé pour envoyer les données à Elasticsearch, mais la sortie de données peut être autre, envoi par courrier, bbdd, etc.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/604461db-e734-440b-a487-b0cb0b1dca69)
+
 Illustration 5 - Billets / Sorties Logstash
 
 Installable sur Linux, Windows, MacOS ou dans Docker
@@ -402,6 +407,7 @@ Sur le site de MISP, nous pouvons trouver ses fonctionnalités  :
 Dans notre installation, nous configurerons MISP pour importer des informations, car nous n'aurons pas de cas à partager, bien que vous puissiez effectuer une configuration en simulant un environnement de travail réel dans lequel nous pouvons contribuer à la communauté.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/780c387b-d8b0-45ca-9fec-6439acd03c8a)
+
 Illustration 6 - Schéma MISP
 
 ### Éléments qui composent notre plate-forme SIRP
@@ -466,6 +472,7 @@ Les éléments de détection et de réponse nécessaires, tels que les agents Wa
 Le schéma logique de la solution et de ses composants est présenté ci-dessous.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/e1966a81-5b9e-492c-ad0c-53fa00813f0f)
+
 Illustration 7 - Schéma logique des composants
 
 ## Mise en œuvre
@@ -534,6 +541,7 @@ Les nœuds maîtres, étant les nœuds de gestion de Kubernetes, seront égaleme
 Par mesure de sécurité, le déploiement d'applications ou d'autres composants sur les nœuds maîtres sera désactivé. Nous disposerons donc de 4 nœuds disponibles pour déployer notre solution SIRP.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/2f305055-5c5d-4e1b-92be-1ebcafc67f85)
+
 Illustration 8 - Modèle de cluster Kubernetes HA etcd stacked (kubernetes.io)
 
 Il existe deux modèles pour créer un cluster Kubernetes HA avec Kubeadm : le modèle topologique "etcd stacked" et le modèle "etcd external".
@@ -630,6 +638,7 @@ Wazuh peut fonctionner seul, mais il n'y aurait aucun endroit pour visualiser le
 Pour cela, un modèle est configuré pour utiliser Elasticsearch, et un plugin est installé dans Kibana pour permettre la visualisation et la gestion de Wazuh.
 
 ![](https://hackmd.io/_uploads/H1rZ_vTK3.png)
+
 Illustration 9 - Écran de connexion Wazuh-Kibana
 
 Comme le montre l'image ci-dessus, l'écran de connexion de Kibana est personnalisé par Wazuh. Une fois que vous avez saisi le nom d'utilisateur et le mot de passe créés pendant le processus d'installation (dans ce cas, dans Elasticsearch), vous avez accès aux fonctionnalités de visualisation des informations stockées dans ce logiciel et pouvez interagir avec le serveur Wazuh via l'API, en utilisant un autre nom d'utilisateur qui a été créé lors du processus d'installation de Wazuh.
@@ -639,6 +648,7 @@ L'apparence des écrans peut varier en fonction des versions des produits utilis
 Lorsque vous vous connectez à Wazuh-Kibana, nous vérifions la connectivité avec Elasticsearch, la disponibilité des index nécessaires, ainsi que la connexion avec le serveur Wazuh-API.
 
 ![](https://hackmd.io/_uploads/B1eOo1OTF3.png)
+
 Illustration 10 - Écran des modules Wazuh
 
 L'écran ci-dessus affiche la page d'accueil une fois connecté avec un utilisateur valide. Les modules Wazuh sont affichés, bien qu'ils fournissent des données de fonctionnement, ces informations ne sont pas spécifiques aux conteneurs où se trouvent les différents composants. Les informations deviennent utiles lorsqu'il y a des agents qui rapportent des informations.
@@ -646,11 +656,13 @@ L'écran ci-dessus affiche la page d'accueil une fois connecté avec un utilisat
 Par défaut, tous les modules ne sont pas activés. Par exemple, si le module de vulnérabilité n'est pas activé, ce comportement peut être modifié en modifiant la configuration de l'agent pour activer ou désactiver les modules nécessaires.
 
 ![](https://hackmd.io/_uploads/Sk4NlO6F2.png)
+
 Illustration 11 - Écran des agents Wazuh
 
 Dans notre cas, comme vous pouvez le voir, nous avons 4 agents disponibles et connectés, dont 2 sur des ordinateurs Linux et 2 sur des ordinateurs Windows. La version du système d'exploitation et son état sont indiqués, entre autres informations. Par exemple, l'une des fonctions des agents est d'obtenir l'inventaire des logiciels sur les ordinateurs gérés.
 
 ![](https://hackmd.io/_uploads/SyEwe_aYh.png)
+
 Illustration 12 - Écran des événements de sécurité Wazuh
 
 Dans la section "Security Events", nous pouvons voir que l'agent qui signale le plus d'informations sur les événements est le serveur Windows, qui est un contrôleur de domaine. Cela ne signifie évidemment pas que nous avons un problème, mais simplement qu'il y a plus d'activité en termes d'événements de sécurité.
@@ -664,6 +676,7 @@ Kibana permet de visualiser des informations à l'aide de tableaux de bord ou d'
 Pour TheHive, notre outil de gestion des incidents, la première fois que nous y accédons, une option s'affiche pour mettre à jour la base de données du produit (Cassandra dans notre cas) afin de créer les structures et les données nécessaires pour commencer à travailler avec l'outil.
 
 ![](https://hackmd.io/_uploads/HJu-tKaYn.png)
+
 Illustration 13 - Écran de connexion à TheHive
 
 Une fois authentifiés dans l'outil, nous avons une organisation par défaut, qui est l'organisation d'administration. Nous pouvons l'utiliser, mais il est recommandé de changer le mot de passe par défaut pour un mot de passe plus sécurisé.
@@ -671,16 +684,19 @@ Une fois authentifiés dans l'outil, nous avons une organisation par défaut, qu
 La prochaine étape consiste à créer une organisation, dans notre cas, la société fictive à laquelle nous offrons nos services SOC ou CSIRT. Dans notre exemple, la société s'appelle MyHome Inc. Il suffit de donner un nom et une description à l'organisation.
 
 ![](https://hackmd.io/_uploads/Sk8uYYpt3.png)
+
 Illustration 14 - Écran de création d'organisation dans TheHive
 
 Une fois l'organisation créée, nous pouvons déjà créer des utilisateurs au sein de cette organisation.
 
 ![](https://hackmd.io/_uploads/ryBsYFat2.png)
+
 Illustration 15 - Écran des organisations dans TheHive
 
 Pour ce faire, nous pouvons suivre le lien du nom de notre nouvelle organisation, où nous aurons la possibilité de le faire.
 
 ![](https://hackmd.io/_uploads/SkJyqtTYh.png)
+
 Illustration 16 - Écran des utilisateurs par organisation dans TheHive
 
 Dans notre cas, nous avons créé un utilisateur pour gérer l'organisation. Nous utilisons des adresses e-mail comme noms d'utilisateur. Nous avons créé un premier compte avec le rôle "orgAdmin" et deux autres utilisateurs pour "cortex" et "elastalert" que nous utiliserons ultérieurement. Tous les utilisateurs ont activé une clé d'API. Seul l'utilisateur administrateur de l'organisation a reçu un mot de passe, car nous en aurons besoin pour accéder à TheHive dans cette organisation.
@@ -694,6 +710,7 @@ Une fois que nous avons créé cet utilisateur, nous nous déconnectons de l'uti
 Avant cela, nous pouvons également accéder à l'option de configuration de l'interface utilisateur, où nous pouvons modifier le format de date (par défaut, il est au format MM/JJ/AA, mais nous pouvons le changer en JJ/MM/AA, qui est plus couramment utilisé dans notre pays, mais cela dépend des préférences personnelles). Nous pouvons également configurer l'affichage des cas une fois que nous nous connectons avec notre utilisateur d'organisation. J'ai laissé cette option par défaut.
 
 ![](https://hackmd.io/_uploads/BkkEcK6th.png)
+
 Illustration 17 - Écran des cas dans TheHive
 
 Une fois authentifié en tant qu'utilisateur administrateur de notre nouvelle organisation, nous arrivons sur un écran affichant les cas. Comme nous n'en avons pas encore, nous pouvons appliquer des filtres (utiles lorsque nous avons un grand nombre de cas).
@@ -711,6 +728,7 @@ Certaines de ces options seront utilisées plus tard dans notre cas d'utilisatio
 En haut à droite, nous avons un menu "Organisation" à côté de notre nom d'utilisateur authentifié dans l'application. À partir de ce menu, nous pouvons accéder à la configuration des utilisateurs, des modèles, des tags personnalisés et de l'interface utilisateur.
 
 ![](https://hackmd.io/_uploads/BkjDqYTKh.png)
+
 Illustration 18 - Écran des modèles de cas dans TheHive
 
 Nous avons déjà vu la partie des utilisateurs précédemment, donc nous n'y reviendrons pas, mais vous pourriez être intéressé par les options de "Modèles", où nous pouvons créer des modèles avec des champs personnalisés pour cette organisation ou importer des modèles déjà créés par des tiers (par exemple, par la communauté).
@@ -722,6 +740,7 @@ Pour configurer l'accès de TheHive à Cortex ou MISP, nous devons ajouter l'URL
 Pour Cortex, notre image Docker vous permet de configurer la connexion à Cortex à l'aide de paramètres. C'est l'option que nous avons suivie, comme vous pouvez le voir sur l'écran suivant. En bas à droite, nous avons une icône qui indique en vert que nous avons une connectivité avec Cortex (en rouge en cas de problème). Nous pouvons également vérifier cela en cliquant sur l'utilisateur avec lequel nous sommes authentifiés dans l'application, puis en sélectionnant "À propos". En plus de nous donner les versions des logiciels, nous pouvons voir si la connexion avec Cortex est établie (indiqué par OK).
 
 ![](https://hackmd.io/_uploads/H1f3cY6Fn.png)
+
 Illustration 19 - Écran "À propos" et connexion entre TheHive et Cortex
 
 ### Cortex
@@ -729,16 +748,19 @@ Illustration 19 - Écran "À propos" et connexion entre TheHive et Cortex
 Une fois que la base de données est initialisée, comme dans TheHive, nous pouvons accéder à notre instance de Cortex. Nous visitons l'URL où l'écran de connexion devrait apparaître.
 
 ![](https://hackmd.io/_uploads/HJUHiK6Kh.png)
+
 Illustration 20 - Écran de connexion à Cortex
 
 Comme nous l'avons fait avec TheHive, la première étape consiste à créer une organisation. Dans notre cas, nous revenons à la société fictive MyHome Inc.
 
 ![](https://hackmd.io/_uploads/SJdOiFpYn.png)
+
 Illustration 21 - Écran des organisations dans Cortex
 
 Maintenant que nous avons créé l'organisation, si nous cliquons dessus et suivons le lien, les utilisateurs nous apparaîtront. Par défaut, il n'y en a aucun, mais nous allons créer deux utilisateurs : un utilisateur avec tous les rôles, qui sera notre administrateur (nommé "Paola"), et un utilisateur avec les rôles "read" et "analyze", qui sera utilisé par TheHive pour interagir avec Cortex. Cet utilisateur n'a pas besoin de mot de passe, seule la clé d'API est nécessaire, comme nous l'avons mentionné précédemment lors de la configuration dans le fichier "application.conf".
 
 ![](https://hackmd.io/_uploads/BkuiotTFh.png)
+
 Illustration 22 - Écran des utilisateurs par organisation dans Cortex
 
 Maintenant, nous nous déconnectons et nous nous connectons à l'application avec notre nouvel utilisateur administrateur d'organisation, "murdock". Nous devons maintenant configurer Cortex.
@@ -750,6 +772,7 @@ Dans mon cas, j'ai quelques clés d'API (comme SHODAN) que j'ai en mode "Trial" 
 Avec plus de sources de renseignements et de meilleure qualité, nous pourrons obtenir des informations fiables et utiles pour les observateurs de nos cas dans TheHive.
 
 ![](https://hackmd.io/_uploads/Sko0iFTK3.png)
+
 Illustration 23 - Écran des paramètres des analyseurs dans Cortex
 
 Si nous accédons à la section "Organisation", nous pouvons voir les utilisateurs (que nous avons déjà vus auparavant), puis nous allons dans "Analyzers Config", où nous pouvons configurer les analyseurs. Comme vous pouvez le voir sur l'image, il y en a jusqu'à 81 disponibles (ces paramètres sont communs à plusieurs analyseurs).
@@ -759,11 +782,13 @@ Dans notre cas, nous activerons certains analyseurs. Pour cela, il suffit de cli
 Parmi les analyseurs, nous en avons un que nous examinerons plus en détail dans la section suivante : MISP. C'est là que notre composant de plateforme SIRP entre en jeu.
 
 ![](https://hackmd.io/_uploads/rJrfhKTth.png)
+
 Illustration 24 - Écran de configuration de l'analyseur MISP dans Cortex
 
 Une fois les modules ou plugins que nous allons utiliser configurés, nous passons à la section suivante : "Analyzers". Il y en a 164 disponibles (qui utilisent les 81 configurations de paramètres mentionnées précédemment).
 
 ![](https://hackmd.io/_uploads/SkNH3tTKn.png)
+
 Illustration 25 - Écran d'activation/désactivation des analyseurs dans Cortex
 
 Pour les activer, il suffit de cliquer sur "Enable" et un formulaire s'affiche pour demander des informations de configuration, telles que le temps de mise en cache, le délai pour les requêtes, etc. J'ai laissé les options par défaut en attendant de les tester et de voir si des ajustements sont nécessaires.
@@ -771,6 +796,7 @@ Pour les activer, il suffit de cliquer sur "Enable" et un formulaire s'affiche p
 Ensuite, nous pouvons voir les paramètres pour notre analyseur MISP. Comme vous pouvez le voir sur l'image, certaines informations sont incomplètes en haut, mais les paramètres que nous avons déjà configurés apparaissent ainsi que les nouveaux paramètres mentionnés précédemment.
 
 ![](https://hackmd.io/_uploads/SyYD2Kath.png)
+
 Illustration 26 - Écran d'activation de l'analyseur MISP dans Cortex
 
 Au moment de la rédaction de ce document, j'ai activé les modules de réponse suivants (en attendant de confirmer certaines demandes d'accès à d'autres services) :
@@ -800,6 +826,7 @@ Chaque analyseur est spécialisé dans des domaines différents, tels que la ré
 Généralement, les analyseurs sont des programmes écrits en Python. Certains d'entre eux s'exécutent sous forme de conteneurs Docker, ce qui est courant pour les analyseurs et les répondeurs.
 
 ![](https://hackmd.io/_uploads/ByxqnY6Fh.png)
+
 Illustration 27 - Écran de configuration des répondeurs dans Cortex
 
 De même, nous avons une section de configuration des paramètres qui nous permet d'activer ou de désactiver les répondeurs. La logique est similaire à celle des analyseurs.
@@ -817,11 +844,13 @@ Un utilisateur Wazuh a donc été créé pour ce type de réponse. Nous nous ren
 Dans ce cas, étant donné qu'il s'agit d'un environnement simulé, nous avons configuré l'utilisateur avec le rôle "admin". Cependant, dans un environnement réel, il serait préférable de limiter les autorisations au strict minimum nécessaire. Dans ce cas, j'ai choisi cette configuration pour m'assurer que cela fonctionne plutôt que de passer du temps à tester différentes autorisations pour vérifier si elles sont suffisantes.
 
 ![](https://hackmd.io/_uploads/rJ333Kpth.png)
+
 Illustration 28 - Écran des utilisateurs Wazuh
 
 Pour conclure, nous avons toujours considéré Cortex comme un allié de TheHive, mais il peut également être utilisé individuellement. En haut à gauche, nous pouvons voir l'option "New Analysis", qui nous permet de soumettre différents types de données (observables) à analyser par Cortex.
 
 ![](https://hackmd.io/_uploads/HyzkTYptn.png)
+
 Illustration 29 - Écran de lancement de l'analyse dans Cortex
 
 ### MISP
@@ -829,11 +858,13 @@ Illustration 29 - Écran de lancement de l'analyse dans Cortex
 Une fois le produit installé et opérationnel, nous avons une base de données vide, tout comme dans les cas précédents. Pour accéder au service, nous utilisons la console Web en suivant l'URL, où l'écran de connexion de MISP apparaît.
 
 ![](https://hackmd.io/_uploads/r1QM0KaF3.png)
+
 Illustration 30 - Écran de connexion à MISP
 
 Nous nous connectons en tant qu'administrateur par défaut (admin@admin.test) et procédons à la création de notre organisation fictive, qui représente la société cliente pour laquelle notre plateforme SIRP fournit des services.
 
 ![](https://hackmd.io/_uploads/ByiPCF6F2.png)
+
 Illustration 31 - Vue des organisations dans MISP
 
 Sur cet écran, nous voyons notre organisation par défaut et celle que nous avons créée, MyHome Inc. Pour créer une nouvelle organisation, nous accédons au menu "Administration" et sélectionnons "Add Organization", ou nous cliquons simplement sur "Administration" et trouvons l'option "Add Organization" dans le menu latéral gauche.
@@ -845,6 +876,7 @@ MISP offre de nombreuses options de configuration et d'actions sur le produit, m
 Ensuite, comme pour les autres composants, nous créons un utilisateur pour la nouvelle organisation et un utilisateur pour notre Cortex, afin de pouvoir travailler avec notre plateforme MISP via l'API.
 
 ![](https://hackmd.io/_uploads/BJniRYpFh.png)
+
 Illustration 32 - Écran des utilisateurs dans MISP
 
 Comme pour les cas précédents, une adresse e-mail est requise. Nous avons donc créé un utilisateur avec des autorisations en lecture seule, ce qui devrait suffire si la fonction de Cortex est prise en compte.
@@ -854,6 +886,7 @@ Nous nous déconnectons et nous connectons à l'application MISP avec notre nouv
 À ce stade, notre base de données est toujours vide. Nous devons donc lui donner du contenu. Pour cela, nous examinons notre liste de "Feeds".
 
 ![](https://hackmd.io/_uploads/SykyC9pFn.png)
+
 Illustration 33 - Écran de la liste des flux dans MISP
 
 Par défaut, deux flux sont fournis, du moins dans mon installation utilisant le référentiel MISP sur GitHub. Pour les afficher et les activer (ils sont désactivés par défaut), nous accédons à "Sync Actions" et "List Feeds". Dans les actions à droite, nous trouvons l'option pour les activer.
@@ -865,6 +898,7 @@ En dehors de cette liste de flux, il serait judicieux de se connecter et d'écha
 Ces flux peuvent être téléchargés à tout moment, comme le montrent les actions à côté de chaque flux dans la liste des événements. Cependant, vous devez également activer régulièrement ces mises à jour pour rester à jour avec les informations qui circulent dans le monde.
 
 ![](https://hackmd.io/_uploads/Sywz0cpt3.png)
+
 Illustration 34 - Écran de planification des tâches dans MISP
 
 Dans le menu "Administration", nous avons des "Scheduled Tasks" pour programmer la mise à jour de nos flux (ceux de la liste ci-dessus) et du cache maintenu dans MISP.
@@ -874,6 +908,7 @@ Vous pouvez programmer la fréquence d'exécution et l'heure de la première ex�
 Dans notre cas, nous voyons qu'une tâche sur deux est terminée. Nous pouvons vérifier comment cela s'est déroulé en accédant à l'option "Jobs".
 
 ![](https://hackmd.io/_uploads/BJxsAc6th.png)
+
 Illustration 35 - Écran des tâches dans MISP
 
 Apparemment, l'exécution du flux 1 semble fonctionner correctement, mais pour le flux 2 (numéro attribué dans la liste des flux), le téléchargement échoue toujours (cela doit être vérifié pour déterminer s'il y a un problème avec l'URL ou l'accès, etc.). Cependant, le téléchargement manuel, qui est la première ligne de l'écran précédent, semble avoir fonctionné sans erreur, du moins en apparence.
@@ -881,6 +916,7 @@ Apparemment, l'exécution du flux 1 semble fonctionner correctement, mais pour l
 En parlant d'erreurs, il est également intéressant de mentionner l'option "Server Settings and Maintenance" du même menu "Administration".
 
 ![](https://hackmd.io/_uploads/ryL6RqpY3.png)
+
 Illustration 36 - Écran des paramètres du serveur et de la maintenance dans MISP
 
 C'est une sorte d'option d'auto-diagnostic du logiciel MISP. Elle permet également de modifier certains paramètres à partir de ces écrans. Idéalement, tout devrait être en vert, mais j'ai passé un peu de temps à résoudre certains "Critical Settings", la plupart étant dus à des paramètres non configurés qui sont laissés par défaut (par exemple, la langue).
@@ -888,11 +924,13 @@ C'est une sorte d'option d'auto-diagnostic du logiciel MISP. Elle permet égalem
 Enfin, pour conclure cette section, il est important de noter que MISP permet également de partager des informations avec notre environnement. Il est possible d'ajouter nos propres événements avec des informations IOC spécifiques à notre organisation. Nous pouvons utiliser les balises déjà créées pour les événements importés et créer nos propres balises pour mieux organiser les données que nous ajoutons depuis notre organisation.
 
 ![](https://hackmd.io/_uploads/rJaZyopY3.png)
+
 Illustration 37 - Écran de la liste des événements dans MISP
 
 Pour cela, nous pouvons utiliser le menu "Event Actions", où l'option "List Tags" nous permet également d'ajouter des balises. Dans notre cas, nous avons ajouté une balise "Manual" lorsqu'un analyste ajoute des informations à notre MISP manuellement.
 
 ![](https://hackmd.io/_uploads/B1PIOiTK2.png)
+
 Illustration 38 - Écran de la liste des balises dans MISP
 
 ### Praeco-Elastalert
@@ -906,6 +944,7 @@ En ce qui concerne la sortie des alertes, Elastalert offre plusieurs options, te
 Praeco est l'interface web qui facilite la configuration des alertes à l'aide de formulaires et affiche les métadonnées d'Elastalert.
 
 ![](https://hackmd.io/_uploads/BJOFiipFn.png)
+
 Illustration 39 - Écran principal de Praeco
 
 Cependant, un autre défaut du produit est son manque d'authentification, ce qui signifie qu'il permet l'accès à toute personne ayant la visibilité de l'URL. Cela peut être dangereux car cela permet à des utilisateurs non autorisés d'effectuer des requêtes sur Elasticsearch, qui contient des informations sensibles sur l'organisation. Pour remédier à ce problème, nous recommandons fortement de configurer NGINX pour fournir un cryptage TLS et d'ajouter une authentification de base.
@@ -915,6 +954,7 @@ Lorsque vous accédez à la console Web de Praeco, vous remarquerez un menu sur 
 Dans le cadre de ce test, nous avons créé une règle appelée «SSH Failed Login». Cette règle interroge Elasticsearch pour rechercher plus de deux connexions SSH ayant échoué (ce nombre est trop faible pour générer une alerte réelle). Si la règle détecte un dépassement du seuil, une alerte est générée dans TheHive. Cette alerte peut ensuite être traitée en l'ajoutant à un cas ou en suivant le processus approprié que vous jugez le plus pratique.
 
 ![](https://hackmd.io/_uploads/B1f2-2TKh.png)
+
 Illustration 40 - Écran d'Alertes de TheHive (alertes créées par Elastalert)
 
 Pour générer des alertes pertinentes, il est important de jouer avec les compteurs d'événements, la fréquence, et d'autres paramètres. Ces paramètres déterminent si une alerte est utile en évitant autant que possible les faux positifs, tout en détectant les comportements qui représentent de réelles menaces et/ou des incidents potentiels.
@@ -926,11 +966,13 @@ Pour chaque règle, ces données peuvent être différenciées, y compris la pol
 Dans notre cas, la configuration de TheHive est également stockée dans un fichier situé dans le répertoire «Rules», qui a un rôle spécial. Ce fichier permet d'enregistrer l'URL et les informations d'accès, et peut ensuite être utilisé par toutes les règles. Il utilise la clé d'API de l'utilisateur «elastalert», comme nous l'avons vu dans la section de configuration de TheHive.
 
 ![](https://hackmd.io/_uploads/ryeCMn6F3.png)
+
 Illustration 41 - Écran de définition de règle dans Praeco
 
 En plus des étapes précédentes, il est essentiel de créer un utilisateur dans Elasticsearch et de lui attribuer les autorisations nécessaires pour créer et mapper les index requis pour utiliser Elastalert, ainsi que pour consulter les données sur lesquelles les alertes sont basées.
 
 ![](https://hackmd.io/_uploads/B1inQhatn.png)
+
 Illustration 42 - Écran des utilisateurs Elasticsearch (utilisateur "elastalert")
 
 Dans la section "Internal Users" de Wazuh-Kibana, vous pouvez créer un autre utilisateur nommé "elastalert" de la même manière que vous l'avez fait pour TheHive. Vous devez attribuer un nom d'utilisateur et un mot de passe à cet utilisateur.
@@ -938,6 +980,7 @@ Dans la section "Internal Users" de Wazuh-Kibana, vous pouvez créer un autre ut
 Cela peut être fait via l'interface web de Wazuh-Kibana, où vous avez également la possibilité de créer un rôle pour attribuer les autorisations nécessaires à ce nouvel utilisateur.
 
 ![](https://hackmd.io/_uploads/SyUgVnpYh.png)
+
 Illustration 43 - Écran des rôles Elasticsearch (autorisations "elastalert")
 
 Pour gérer les autorisations de l'utilisateur "elastalert", vous pouvez configurer des rôles dans Elasticsearch. Les rôles permettent de définir les autorisations spécifiques pour cet utilisateur. Vous pouvez attribuer des autorisations pour créer et mapper les index nécessaires à Elastalert, ainsi que pour consulter les données nécessaires pour générer les alertes.
