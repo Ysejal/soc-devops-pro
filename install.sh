@@ -22,6 +22,6 @@ cd ~/Shuffle
 sudo mkdir shuffle-database
 sudo chown -R 1000:1000 shuffle-database
 cd
-sudo git clone https://github.com/zengrotrust/Security-Automation-Stack
-cd Security-Automation-Stack
+sudo git clone https://github.com/Ysejal/soc-devops-pro
+cd soc-devops-pro
 sudo docker compose up -d
