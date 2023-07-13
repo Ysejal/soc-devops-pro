@@ -137,7 +137,7 @@ Les règles de détection disponibles pour le produit sont gérées de manière 
 Le produit peut être intégré par API avec d'autres systèmes :
 •      Slack : vous pouvez créer des messages dans slack pour publier des alertes
 •      PagerDuty : est un service SaaS pour incident response dans lequel vous pouvez créer un service pour publier des alertes dans votre Incident Dashboard
-•      VirusTotal : peut être intégré pour permettre la détection de fichiers malveillants à l'aide du BBDD de VirusTotal
+•      VirusTotal : peut être intégré pour permettre la détection de fichiers malveillants à l'aide du BDD de VirusTotal
 •      Custom Integration : utilisé pour l'intégration avec des produits tiers, il s'agit d'une option générique qui permet l'intégration par script
 
 Il est possible d'accéder à Wazuh Server via le Web avec un navigateur ou d'interagir avec celui-ci via l'API Wazuh, une API RESTful qui permet de gérer le Wazuh, ainsi que d'effectuer diverses requêtes.
@@ -471,209 +471,585 @@ Illustration 7 - Schéma logique des composants
 
 ## Mise en œuvre
 ### Options de déploiement
-ATTENTION RELIRE 
-Une fois que vous avez déterminé les composants qui constituent la solution, vous devez maintenant prendre des décisions concernant la mise en œuvre. Le déploiement nécessite une haute disponibilité et une solution évolutive, ce qui nécessite un haut composant d'automatisation.
+ 
+Une fois que vous avez identifié les composants constituant la solution, vous devez maintenant prendre des décisions concernant sa mise en œuvre. Le déploiement nécessite une haute disponibilité et une solution évolutive, ce qui implique une forte automatisation des composants.
 
-Les machines physiques ont été rejetées directement parce que je ne dispose pas d'équipements suffisants pour simuler un environnement d'exploitation. La solution sera basée sur des machines virtuelles, dans mon cas en utilisant VirtualBox, mais la solution de virtualisation a priori est indifférente au montage à effectuer.
+Les machines physiques ont été écartées car je ne dispose pas des équipements nécessaires pour simuler un environnement d'exploitation. La solution sera donc basée sur des machines virtuelles.
 
-Ainsi, les multiples options d'installation des produits ainsi que leurs versions ont été évaluées, étant donné que toutes ne sont pas disponibles pour l'installation sous quelque forme que ce soit, c'est-à-dire que les dernières versions des produits mentionnées au chapitre précédent du présent document sont conçues pour faire des installations manuelles en téléchargeant les produits des sites Web de l'organisation qui parraine ou dirige le projet open source correspondant.
+Ainsi, nous avons évalué les différentes options d'installation des produits ainsi que leurs versions. Toutes les versions ne sont pas disponibles pour une installation directe. Par exemple, les dernières versions des produits mentionnés dans le chapitre précédent de ce document nécessitent des installations manuelles en téléchargeant les produits à partir des sites Web de l'organisation qui soutient ou dirige le projet open source.
 
-Pour donner un exemple pour comprendre ce qui est dit au point précédent, la version documentée à installer avec Wazuh de ELK n'est pas celle du site Web d'Elastic mais l'Opendistro Elasticsearch, bien que sur le site Web de Wazuh on traite également des options d'installation avec l'option free d'Elastic, la dernière version de ce produit qui est la  dans le cas concret de Kibana n'a pas le plugin de Wazuh.
+Pour donner un exemple afin de clarifier ce qui a été mentionné précédemment, la version d'ELK documentée pour l'installation avec Wazuh n'est pas celle disponible sur le site Web d'Elastic, mais plutôt l'Opendistro Elasticsearch. Cependant, le site Web de Wazuh traite également des options d'installation avec la version gratuite d'Elastic.
 
 ### Installation manuelle des produits
 
-Les différents produits disposent d'options d'installation plus ou moins documentées pour effectuer l'installation et la configuration des différents éléments via des paquets standard de SE et/ou des sources via des référentiels principalement de type GIT.
+Les différents produits offrent des options d'installation plus ou moins documentées pour effectuer l'installation et la configuration des différents éléments à l'aide de paquets standard du système d'exploitation (SE) et/ou à partir des sources via des référentiels, principalement de type GIT.
 
-Il existe également des OVA avec des produits préinstallés et configurés sur un système d'exploitation Linux comme c'est le cas du CSIRT-KIT.
+Il existe également des OVA (Appliance Virtuelle Ouverte) avec des produits préinstallés et configurés sur un système d'exploitation Linux, comme c'est le cas du CSIRT-KIT.
 
-Cela peut être très utile pour un environnement de test et pour s'entraîner relativement rapidement à la fonctionnalité des produits (en particulier le CSIRT-KIT), mais comme dans notre cas nous voulons avoir l'automatisation, la haute disponibilité et l'évolutivité de la solution car cette méthode a été abandonnée.
+Ces OVA peuvent être très utiles pour un environnement de test et pour se familiariser rapidement avec les fonctionnalités des produits (en particulier le CSIRT-KIT). Cependant, dans notre cas, nous souhaitons automatiser, assurer une haute disponibilité et permettre l'évolutivité de la solution, c'est pourquoi cette méthode a été abandonnée.
 
 ### Installation automatisée avec Ansible
 
-Ansible est un logiciel open source qui est devenu très populaire ces dernières années. Il permet de gérer de façon centralisée la configuration et le déploiement des applications et des produits, ce qui simplifie considérablement, grâce à des recettes appelées playbooks (dans un langage déclaratif YAML) qui utilisent des modules spécifiques, tels que la gestion des packages de système d'exploitation, la copie de fichiers et de nombreuses autres fonctionnalités, le produit comprend de nombreux modules et la communauté continue de créer de nouveaux modules. Il existe des référentiels tels que Ansible-galaxy où vous pouvez trouver une multitude d'exemples de playbooks et de rôles (concept d'ansible) pour effectuer diverses tâches dans les applications et les systèmes gérés.
+Ansible est un logiciel open source de plus en plus populaire qui permet une gestion centralisée de la configuration et du déploiement des applications et des produits. Il simplifie considérablement ces tâches grâce à des recettes appelées "playbooks" (définis dans un langage déclaratif YAML) qui utilisent des modules spécifiques. Ces modules offrent des fonctionnalités telles que la gestion des packages du système d'exploitation, la copie de fichiers, et bien d'autres. Ansible dispose d'une large bibliothèque de modules et la communauté continue d'en créer de nouveaux. Des référentiels comme Ansible Galaxy offrent de nombreux exemples de playbooks et de rôles (un concept spécifique à Ansible) pour accomplir différentes tâches dans les applications et les systèmes gérés.
 
-Dans le cas spécifique de la mise en œuvre de la plate-forme SIRP, les produits que nous avons envisagés sur le site Web de Wazuh facilitent déjà la procédure, bien qu'il nécessite également quelques retouches permettant de faire l'installation de Wazuh et Elastic ainsi que l'installation d'agents Wazuh et Filebeat.
+Dans le cas spécifique de la mise en œuvre de la plate-forme SIRP, les produits envisagés sur le site Web de Wazuh simplifient déjà la procédure, bien qu'ils nécessitent également quelques ajustements pour l'installation de Wazuh, Elastic, ainsi que l'installation des agents Wazuh et Filebeat.
 
-Pour les autres produits choisis pour la plate-forme SIRP, il existe également des Playbooks prêts à l'installation, comme cela a déjà été dit, la communauté facilite cela dans de nombreux cas via des référentiels GIT, etc.
+Pour les autres produits choisis dans la plate-forme SIRP, il existe également des playbooks prêts à l'emploi. Comme mentionné précédemment, la communauté facilite cela en fournissant des référentiels sur des plateformes comme GIT, etc.
 
 ### Installation avec Docker / Docker Compose
 
-Docker est l'une des plates-formes de conteneurs les plus utilisées aujourd'hui, permettant de séparer les applications et l'infrastructure nécessaires à leur exécution dans ce que l'on appelle les microservices.
-Le conteneur diffère entre autres de la virtualisation, car il est beaucoup plus léger, car vous n'avez pas besoin de déployer le système d'exploitation complet, mais une couche système minimale et les librairies nécessaires pour exécuter l'application/le produit.
-Il vous permet de travailler avec des images précréées et les conteneurs sont créés, détruits et recréés à partir de ces images. Si une persistance est requise, les conteneurs doivent créer des volumes ou mapper des répertoires sur l'hôte sur lequel les conteneurs sont exécutés, de sorte que les données restent persistantes même si le conteneur est détruit.
-Au niveau de la sécurité, ils n'exposent que les ports nécessaires qui sont visibles de l'extérieur, les autres ports ne sont visibles en interne que par le réseau de conteneurs (qui a priori est caché à l'extérieur).
-Docker Compose est un outil qui permet d'« orchestrer », plutôt d'automatiser à l'aide d'une recette descriptive YAML les conteneurs à créer et avec quelles fonctionnalités et ressources (réseaux et volumes essentiellement).
+Docker est l'une des plates-formes de conteneurisation les plus utilisées aujourd'hui. Elle permet de séparer les applications et l'infrastructure nécessaires à leur exécution en utilisant des microservices. Un conteneur diffère de la virtualisation traditionnelle en étant beaucoup plus léger. En effet, il ne nécessite pas le déploiement d'un système d'exploitation complet, mais seulement d'une couche système minimale et des bibliothèques requises pour exécuter l'application ou le produit. Docker facilite l'utilisation d'images pré-construites et les conteneurs sont créés, détruits et reconstruits à partir de ces images. Si une persistance des données est requise, les conteneurs doivent créer des volumes ou mapper des répertoires sur l'hôte où les conteneurs s'exécutent, afin que les données restent persistantes même si le conteneur est détruit. En termes de sécurité, les conteneurs n'exposent que les ports nécessaires à l'extérieur, tandis que les autres ports sont accessibles uniquement à l'intérieur du réseau des conteneurs (qui est généralement masqué à l'extérieur). Docker Compose est un outil qui permet d'orchestrer les conteneurs en utilisant une recette descriptive en format YAML pour définir quels conteneurs créer et quelles fonctionnalités et ressources leur assigner (notamment les réseaux et les volumes).
 
-Dans notre cas particulier pour la plate-forme SIRP, ce serait une bonne solution et cela nous permet d'atteindre l'objectif d'automatisation, pour la partie haute disponibilité et évolutivité, il suffirait de disposer de plus de matériel capable d'exécuter des conteneurs et d'appliquer la recette personnalisée pour créer et gérer les conteneurs nécessaires.
-Il existe une solution pour les conteneurs pour Wazuh, Elasticsearch (OpenDistro, et la plus entreprise d'Elastic), ainsi que pour TheHive, Cortex et MISP, qui ne fonctionnent pas dans certains cas avec les dernières versions du produit, mais permettent d'utiliser ces images. Vous pouvez également créer votre propre image ou une image basée sur la modification d'une image existante à l'aide des fichiers de configuration Dockerfile.
+Dans notre cas spécifique pour la plate-forme SIRP, Docker/ Docker Compose serait une bonne solution, nous permettant ainsi d'atteindre l'objectif d'automatisation. Pour garantir une haute disponibilité et une évolutivité, il suffirait d'avoir suffisamment de matériel capable d'exécuter les conteneurs et d'appliquer la recette personnalisée pour créer et gérer les conteneurs nécessaires. Il existe des solutions basées sur des conteneurs pour Wazuh, Elasticsearch (OpenDistro et l'édition Enterprise d'Elastic), TheHive, Cortex et MISP. Dans certains cas, ces solutions ne fonctionnent pas avec les toutes dernières versions des produits, mais elles permettent d'utiliser ces images. Vous pouvez également créer votre propre image ou baser une image existante modifiée en utilisant des fichiers de configuration Dockerfile.
 
-### Installation au-dessus de Kubernetes
+### Installation sur Kubernetes
 
-À ce stade, nous avons déjà une solution pour pouvoir déployer automatiquement les composants d'application en adaptant les « recettes » aux différents équipements, comme cela a déjà été dit au point précédent, mais pour faire une véritable orchestration des composants, nous avons Kubernetes.
+À ce stade, nous disposons déjà d'une solution pour déployer automatiquement les composants d'application en adaptant les "recettes" aux différents équipements, comme mentionné précédemment. Cependant, pour une véritable orchestration des composants, nous avons Kubernetes.
 
-Kubernetes (communément appelé k8s), comme indiqué sur internet, est une plateforme portable et extensible open source pour la gestion des charges de travail et des services, tout comme avec l'option Docker-Compose, vous avez une manière déclarative de gérer le déploiement des composants (microservices), en exécutant le deploy des PODs et services nécessaires au fonctionnement de l'application ou du produit. Et tout cela, grâce à un environnement de gestion APIfigé.
+Kubernetes, également connu sous le nom de k8s, est une plateforme open source portable et extensible pour la gestion des charges de travail et des services. Tout comme Docker Compose, il permet de gérer de manière déclarative le déploiement des composants (microservices) en exécutant le déploiement des PODs et des services nécessaires au bon fonctionnement de l'application ou du produit. Tout cela est rendu possible grâce à un environnement de gestion API.
 
-Ce projet a été lancé par Google en 2014 et a depuis été popularisé au point qu'il existe plusieurs versions qui implémentent kubernetes (kubeadm, minikube, kops, etc.), chacune a des fonctionnalités de base communes (par exemple les commandes), mais elles se différencient ensuite entre les composants de base de la solution et l'application de celle-ci (par exemple minikube est généralement utilisé dans des environnements monomodes et/ou pour tester la technologie kubernetes, bien qu'il s'agisse d'une solution 100 % opérationnelle).
+Ce projet a été initié par Google en 2014 et est devenu si populaire qu'il existe plusieurs versions qui implémentent Kubernetes (kubeadm, minikube, kops, etc.). Chacune de ces versions partage des fonctionnalités de base communes, telles que les commandes, mais diffèrent dans les composants de base de la solution et leur application. Par exemple, minikube est souvent utilisé dans des environnements monomodes et/ou pour tester la technologie Kubernetes, bien qu'il soit parfaitement opérationnel.
 
-Kubernetes est une solution tellement flexible qui permet la portabilité entre différents fournisseurs de Cloud public (Azure, AWS, GCP, etc.) ou Cloud privé (on-premise). Il s'agit d'une plate-forme qui tente de renforcer les méthodologies agiles et le DevOps, qui est conçu pour prendre en charge le CI/CD.
+Kubernetes est une solution extrêmement flexible qui permet la portabilité entre différents fournisseurs de Cloud public (Azure, AWS, GCP, etc.) et Cloud privé (on-premise). Il s'agit d'une plateforme conçue pour renforcer les méthodologies agiles et le DevOps, et qui prend en charge le CI/CD (Continuous Integration/Continuous Deployment).
 
-Dans notre cas, nous utiliserons Docker comme plate-forme de conteneurs, mais c'est une solution tellement flexible qu'elle est a priori indépendante de la plate-forme de conteneurs choisie (CRI, Containerd ...), de multiples outils de gestion, addons, etc.
+Dans notre cas, nous utiliserons Docker comme plateforme de conteneurs, mais Kubernetes est suffisamment flexible pour être indépendant de la plateforme de conteneurs choisie (CRI, Containerd, etc.). Il propose de nombreux outils de gestion, addons, etc.
 
-Nous avons également discuté précédemment du concept de POD, qui est l'unité minimale de Kubernetes qui serait comme une enveloppe d'un ou plusieurs conteneurs qui remplissent certaines caractéristiques.
+Nous avons également abordé précédemment le concept de POD, qui est l'unité minimale de Kubernetes, agissant comme une enveloppe pour un ou plusieurs conteneurs partageant certaines caractéristiques.
 
-Une fois la technologie introduite, nous allons à notre étude de cas qui est la plate-forme SIRP avec les composants déjà mentionnés. Il existe de la documentation sur l'installation de Wazuh / Elasticsearch sur la plate-forme k8s, pour tous les autres composants, bien qu'il puisse y avoir une solution au niveau de la communauté open source, ce qui peut être basé sur les implémentations effectuées directement dans Docker ou Docker-Compose pour développer notre propre recette d'installation à partir des images déjà disponibles (TheHive, Cortex et MISP).
+Maintenant que nous avons introduit la technologie, passons à notre étude de cas, qui est la plateforme SIRP avec les composants mentionnés précédemment. Il existe une documentation sur l'installation de Wazuh/Elasticsearch sur la plateforme Kubernetes. Pour les autres composants, bien qu'il puisse y avoir des solutions au sein de la communauté open source, nous pouvons nous baser sur les implémentations existantes dans Docker ou Docker Compose pour développer notre propre recette d'installation à partir des images déjà disponibles (TheHive, Cortex et MISP).
 
-Ainsi, avec ce système de déploiement, nous pouvons avoir une solution avec une haute disponibilité, évolutivité et automatisation dans le déploiement et la maintenance.
+Grâce à ce système de déploiement, nous pouvons obtenir une solution avec une haute disponibilité, évolutivité et automatisation pour le déploiement et la maintenance.
 
 ### Solution d'installation choisie
 
-Après avoir examiné les différentes options disponibles pour la mise en œuvre de notre solution SIRP, il a été considéré que la meilleure option est d'utiliser la plateforme Kubernetes car elle offre tous les avantages dont un déploiement de ce type avec plusieurs composants peut avoir besoin.
+Après avoir examiné les différentes options disponibles pour la mise en œuvre de notre solution SIRP, il a été décidé d'utiliser la plateforme Kubernetes, car elle offre tous les avantages nécessaires pour le déploiement de plusieurs composants.
 
-Pour l'installation des produits de base de la plate-forme SIRP, comme mentionné ci-dessus Wazuh, Elasticsearch, TheHive / Cortex et MISP, nous utiliserons Kubernetes et pour le déploiement des agents, lisez agent Wazuh et les divers Beats utiliseront l'outil également commenté dans les points précédents Ansible.
+Pour l'installation des produits de base de la plate-forme SIRP, tels que Wazuh, Elasticsearch, TheHive/Cortex et MISP, nous utiliserons Kubernetes. Quant au déploiement des agents tels que l'agent Wazuh et les différents Beats, nous utiliserons également l'outil Ansible mentionné précédemment.
 
-Par conséquent, nous tenterons d'utiliser la documentation et les procédures fournies sur les différents sites de ces projets open source en les adaptant à notre environnement de simulation, que nous détaillons dans les points suivants de ce document.
+Nous utiliserons donc la documentation et les procédures fournies sur les différents sites de ces projets open source, en les adaptant à notre environnement de simulation, comme décrit dans les points suivants de ce document.
 
-Pour l'environnement kubernetes, il a été choisi de déployer un cluster sur HA avec Kubeadm, dans lequel nous aurons 3 nœuds master et 4 nœuds worker (tous ont l'agent kubelet installé), en terminologie kubernetes les nœuds master ou control plane sont des nœuds contenant les composants apiserver, controller-manager, scheduler et etcd (bbdd clé-valeur qui stocke les informations de cluster, les configurations, les secrets, les services, etc.).
+Pour notre environnement Kubernetes, nous avons choisi de déployer un cluster en haute disponibilité (HA) avec Kubeadm. Le cluster sera composé de 3 nœuds maîtres et 4 nœuds de travail (tous avec l'agent kubelet installé). En terminologie Kubernetes, les nœuds maîtres (control plane) sont des nœuds contenant les composants apiserver, controller-manager, scheduler et etcd (la base de données clé-valeur qui stocke les informations du cluster, les configurations, les secrets, les services, etc.).
 
-Les nœuds maîtres, car nous pourrions dire qu'ils sont des nœuds de gestion dans ce cas de kubernetes, ont également été réutilisés pour installer Ansible
+Les nœuds maîtres, étant les nœuds de gestion de Kubernetes, seront également utilisés pour installer Ansible.
 
-Pour des raisons de sécurité, le déploiement d'applications ou d'autres composants sur les nœuds maîtres doit être désactivé. Nous disposerons donc de 4 nœuds efficaces pour déployer notre solution SIRP.
+Par mesure de sécurité, le déploiement d'applications ou d'autres composants sur les nœuds maîtres sera désactivé. Nous disposerons donc de 4 nœuds disponibles pour déployer notre solution SIRP.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/2f305055-5c5d-4e1b-92be-1ebcafc67f85)
-Illustration 7 - HA kubernetes etcd stacked (kubernetes.io)
+Illustration 7 - Modèle de cluster Kubernetes HA etcd stacked (kubernetes.io)
 
-Il existe deux modèles pour monter HA de Kubernetes avec kubeadm, le modèle topologique de l'image qui est suivi dans ce projet «etcd stacked» et le modèle «etcd external».
+Il existe deux modèles pour créer un cluster Kubernetes HA avec Kubeadm : le modèle topologique "etcd stacked" et le modèle "etcd external".
 
  ### Ressources
+ 
+Dans l'environnement de simulation utilisé dans ce projet, nous pouvons diviser les ressources utilisées en deux parties : celles qui composent le réseau d'entreprise à protéger et celles de la plateforme SIRP (simulation d'un environnement Cloud avec Kubernetes).
 
- Dans l'environnement de simulation utilisé dans ce projet qui a été déployé, nous pouvons diviser les ressources utilisées en deux parties, celles qui composent le réseau d'entreprise à protéger et ce que serait la plateforme SIRP (simulation d'un environnement Cloud avec Kubernetes).
+Toute la solution est construite autour de 4 ordinateurs physiques équipés de processeurs Intel i7 QuadCore et de 32 Go de RAM.
 
-Toute la solution s'articule autour de 4 ordinateurs physiques dotés de processeurs Intel i7 QuadCore et de 32 Go de RAM.
+### Plateforme SIRP (simulation Cloud On-premise)
 
-### Plate-forme SIRP (simulation Cloud On-premise)
+Les ressources utilisées dans la simulation de Cloud On-premise ou Cloud Privé sont les suivantes :
 
-Les ressources utilisées dans la simulation de Cloud On-premise ou Cloud Privé sont les suivantes:
+• 1 machine virtuelle - Pare-feu Pf-Sense (2 vCPU, 4 Go de RAM et de l'espace disque) - Logiciel : Appliance Pf-Sense (basée sur FreeBSD)
 
-•    1 machine virtuelle - Pare-feu Pf-Sense (2 vCPU, 4 Go de RAM et Go d'espace disque) Logiciel:
+• 7 machines virtuelles - Cluster Kubernetes :
 
-Appliance Pf-Sense (basée sur FreeBSD)
+3 VMs nœuds maîtres (2 vCPU, 4 Go de RAM et 100 Go de disque) ou
 
-•    7 machines virtuelles - Cluster Kubernetes:
+4 VMs nœuds de travail (2 vCPU, 8 Go de RAM et 100 Go de disque)
 
-3 VMs nœuds Master (2 vCPU et 4 Go de RAM et 100 Go de disque) ou 4 VMs nœuds Worker (2 vCPU et 8 Go de RAM et 100 Go de disque)
+Système d'exploitation : CentOS 8.3 ou HAProxy 1.8.23 ou Keepalived 2.0.10 ou GlusterFS 9.1 ou Docker CE 20.10.6 ou Docker-Compose 1.29.1
 
-S.O. CentOS 8.3 ou HAProxy 1.8.23 ou Keepalived 2.0.10 ou GlusferFS 9.1
-ou Docker CE 20.10.6
-ou Docker-Compose 1.29.1
+• Kubernetes 1.21.0 (kubectl, kubeadm, kubelet) ou Ansible 2.9.18 (nœuds maîtres uniquement)
 
-• Kubernetes 1.21.0 (kubectl, kubeadm, kubelet) ou Ansible 2.9.18 (nœuds Master uniquement) :
-  •   Wazuh 4.1.1
-  •  Opendistro Elasticsearch 1.12.0 (Elasticsearch et Kibana 7.10) ou Filebeat 7.10
-ou TheHive 4.1.4 ou Cortex 3.1.1 ou MISP 2.4.142
+Wazuh 4.1.1
+Opendistro Elasticsearch 1.12.0 (Elasticsearch et Kibana 7.10) ou Filebeat 7.10
+TheHive 4.1.4 ou Cortex 3.1.1 ou MISP 2.4.142
 
-### Réseau Entreprise
+### Réseau d'entreprise
 
 Les ressources utilisées dans le réseau d'entreprise sont les suivantes :
 
-•	1 machine virtuelle - Pare-feu Pf-Sense (2 vCPU, 4 Go de RAM et Go d'espace disque) Logiciel :
+• 1 machine virtuelle - Pare-feu Pf-Sense (2 vCPU, 4 Go de RAM et de l'espace disque) - Logiciel : Appliance Pf-Sense (OVA basée sur FreeBSD)
 
-• Appliance Pf-Sense (OVA basée sur FreeBSD)
+• 1 machine virtuelle - Suricata (IPS) :
 
-•	1 machine virtuelle - Logiciel Suricata (IPS) :
+Système d'exploitation : CentOS 8.3 ou Suricata 5.0.6
+Wazuh Agent 4.1.5
+• 1 machine virtuelle - DNS externe, Proxy Utilisateurs, Proxy Revers Software :
 
-• S.O. CentOS 8.3 ou Suricata 5.0.6
+Système d'exploitation : CentOS 8.3 ou Bind 9.11
+Apache 2.4.37 ou Squid 4.4
+Wazuh Agent 4.1.5
+• 1 machine virtuelle - Serveur Web, Serveur Applicatif et Base de données :
 
-• Wazuh Agent 4.1.5
+Appliance BWA (OVA basée sur Ubuntu)
+• 1 machine virtuelle - Contrôleur de domaine AD et DNS interne :
 
-•	1 machine virtuelle - DNS externe, Proxy Utilisateurs, Proxy Revers Software :
+Système d'exploitation : Windows Server 2019 ou Sysmon v13.20
+Wazuh Agent 4.1.5
+• 1 machine virtuelle - Stations de travail :
 
-• S.O. CentOS 8.3 ou Bind 9.11
-
-• Apache 2.4.37 o Squid 4.4
-
-• Wazuh Agent 4.1.5
-
-•	1 machine virtuelle - Web Server, App. Server et BBDD Software :
-
-• Appliance BWA (Ubuntu-based OVA)
- 
-•	1 machine virtuelle - Domain Controller AD et DNS interne Software :
-
-ou Windows Server 2019 ou Sysmon v13.20
-
-• Wazuh Agent 4.1.5
-
-•	1 machine virtuelle - Stations de travail Logiciel :
-
-ou Windows 10
-
-• Wazuh Agent 4.1.5
+Système d'exploitation : Windows 10
+Wazuh Agent 4.1.5
 
 ### Dimensionnement des composants
 
-Bien qu'il s'agisse d'un environnement simulé pour vous permettre de le rendre aussi réel que possible et de montrer les possibilités d'évolutivité des composants de notre plate-forme SIRP, le dimensionnement suivant a été effectué.
+Bien que cet environnement soit simulé, afin de le rendre aussi réaliste que possible et de démontrer les possibilités d'évolutivité des composants de notre plate-forme SIRP, nous avons effectué les dimensionnements suivants :
 
-•	1 nœud wazuh-master et 2 nœuds wazuh-workers
+• 1 nœud Wazuh-Master et 2 nœuds Wazuh-Workers
 
-•	3 elasticsearch nodes
+• 3 nœuds Elasticsearch
 
-•	1 kibana
+• 1 nœud Kibana
 
-•	1 TheHive
+• 1 nœud TheHive
 
-•	1 Cortex
+• 1 nœud Cortex
 
-•	1 MISP
+• 1 nœud MISP
 
-•	1 Praeco-Elastalert
+• 1 nœud Praeco-Elastalert
 
-Dans un environnement réel, si ce n'est pas suffisant, vous pouvez résoudre ce problème en ajoutant des nœuds si le problème concerne la capacité du processeur ou de la mémoire, ou en ajoutant de l'espace disque (qui dépend du nombre d'événements à enregistrer dans Elastic, du nombre d'agents, etc.).
- 
-Installé sur des lubernetes, nous pouvons « jouer » avec les réplicas et ajouter plus de pods à chaque deploy.
+Dans un environnement réel, si ces ressources ne sont pas suffisantes, vous pouvez les ajuster en ajoutant des nœuds supplémentaires pour augmenter la capacité du processeur ou de la mémoire, ou en augmentant l'espace disque (en fonction du nombre d'événements à enregistrer dans Elasticsearch, du nombre d'agents, etc.).
 
-Dans le cas de TheHive, Cortex et MISP, il n'y a pas eu de répliques des produits, car selon la documentation des différents projets, notamment le cas de The Hive et Cortex nécessitent beaucoup de ressources et donc, comme il n'y a plus de matériel disponible, une installation minimale a été effectuée pour pouvoir utiliser les produits.
+Étant déployé sur Kubernetes, nous avons la flexibilité de jouer avec le nombre de réplicas et d'ajouter davantage de PODs à chaque déploiement.
+
+Dans le cas de TheHive, Cortex et MISP, nous n'avons pas utilisé de réplicas pour ces produits, car selon la documentation des différents projets, en particulier pour TheHive et Cortex, ils nécessitent beaucoup de ressources. Étant donné que nous n'avions pas suffisamment de ressources matérielles disponibles, nous avons effectué une installation minimale afin de pouvoir utiliser ces produits.
 
 ### Intégration
+À ce stade, nous avons installé les différents composants de notre plate-forme SIRP. Il est maintenant temps de les configurer et de les intégrer.
 
-
-Jusqu'à présent, les composants qui constituent notre plate-forme SIRP ont été installés, il s'agit maintenant de les configurer et de les intégrer.
-
-La configuration de chaque produit, en utilisant toutes ses possibilités, pourrait nous prendre beaucoup de temps. Par conséquent, les configurations minimales nécessaires ont été effectuées pour pouvoir les rendre opérationnels et effectuer les tâches nécessaires au cas d'utilisation que nous exposerons plus tard.
+La configuration détaillée de chaque produit, en utilisant toutes leurs fonctionnalités, serait très longue. Par conséquent, nous avons effectué les configurations minimales nécessaires pour les rendre opérationnels et leur permettre d'effectuer les tâches requises pour le cas d'utilisation que nous présenterons ultérieurement.
 
 ### Wazuh-Elasticsearch-Kibana
 
-Une fois l'installation terminée, le produit est opérationnel, c'est-à-dire qu'une fois les pods déployés, les configurations appliquées et les données initialisées, la configuration de base pour son fonctionnement est déjà implémentée car il s'agit d'une suite de produits configurée de base pour être intégrée au processus d'installation et d'activation des composants.
+Wazuh-Elasticsearch-Kibana
+Une fois l'installation terminée, le produit est opérationnel. Une fois les PODs déployés, les configurations appliquées et les données initialisées, la configuration de base pour son fonctionnement est déjà implémentée, car il s'agit d'une suite de produits configurée par défaut pour être intégrée lors de l'installation et de l'activation des composants.
 
-Wazuh pourrait fonctionner seul, mais nous n'aurions pas d'endroit où visualiser les informations qu'il nous rapporte sans élasticsearch et kibana, il peut fonctionner via une API, mais c'est plus utile pour les intégrations avec d'autres applications ou pour le développement de soi. Avec Kibana, nous pouvons l'exploiter de manière plus pratique et visuelle via internet.
+Wazuh peut fonctionner seul, mais il n'y aurait aucun endroit pour visualiser les informations qu'il rapporte sans Elasticsearch et Kibana. Bien qu'il puisse fonctionner via une API, il est plus pratique de l'exploiter de manière visuelle via Kibana sur Internet.
 
-Pour ce faire, un modèle est configuré pour utiliser elasticsearch et un plugin est installé qui est utilisé à partir de Kibana pour vous permettre de visualiser et de gérer notre Wazuh.
+Pour cela, un modèle est configuré pour utiliser Elasticsearch, et un plugin est installé dans Kibana pour permettre la visualisation et la gestion de Wazuh.
 
 ![](https://hackmd.io/_uploads/H1rZ_vTK3.png)
-Illustration 9 - Écran Login Wazuh-Kibana
+Illustration 9 - Écran de connexion Wazuh-Kibana
 
-Comme vous pouvez le voir dans l'image ci-dessus, l'écran Login de Kibana est personnalisé par Wazuh, une fois que vous avez saisi le Login et le Password qui est créé pendant le processus d'installation (dans ce cas, dans l'Elasticsearch), car comme il a été commenté, il visualise les informations stockées dans ce logiciel et opère également contre le Wazuh Server via l'API, pour lequel il utilise ce oui par un autre utilisateur, étant donné qu'il est également inscrit lors du processus d'installation dans le produit Wazuh.
+Comme le montre l'image ci-dessus, l'écran de connexion de Kibana est personnalisé par Wazuh. Une fois que vous avez saisi le nom d'utilisateur et le mot de passe créés pendant le processus d'installation (dans ce cas, dans Elasticsearch), vous avez accès aux fonctionnalités de visualisation des informations stockées dans ce logiciel et pouvez interagir avec le serveur Wazuh via l'API, en utilisant un autre nom d'utilisateur qui a été créé lors du processus d'installation de Wazuh.
 
-Le look & feel des écrans peut varier en fonction des versions des produits utilisés.
+L'apparence des écrans peut varier en fonction des versions des produits utilisées.
 
-Lorsque vous vous connectez à notre Wazuh-Kibana, nous vérifions si vous avez une connectivité avec Elasticsearch, si les index nécessaires sont disponibles, ainsi que la connectivité mentionnée ci-dessus et la connexion avec le Wazuh-API Server.
+Lorsque vous vous connectez à Wazuh-Kibana, nous vérifions la connectivité avec Elasticsearch, la disponibilité des index nécessaires, ainsi que la connexion avec le serveur Wazuh-API.
 
 ![](https://hackmd.io/_uploads/B1eOo1OTF3.png)
-Illustration 10 - Écran Wazuh Modules
+Illustration 10 - Écran des modules Wazuh
 
-L'écran ci-dessus affiche la page d'accueil une fois authentifiée avec un utilisateur valide, où les modules Wazuh sont affichés, bien qu'il rapporte des données de fonctionnement, il ne s'agit pas d'informations sur les conteneurs où sont situés les différents composants, il ne commence à être utile que lorsque nous avons des agents qui rapportent des informations.
+L'écran ci-dessus affiche la page d'accueil une fois connecté avec un utilisateur valide. Les modules Wazuh sont affichés, bien qu'ils fournissent des données de fonctionnement, ces informations ne sont pas spécifiques aux conteneurs où se trouvent les différents composants. Les informations deviennent utiles lorsqu'il y a des agents qui rapportent des informations.
 
-Par défaut, tous les modules ne sont pas activés, sans entrer dans les détails, par exemple, si la vulnérabilité est l'un des modules non actifs, ce comportement peut être modifié en modifiant la configuration de l'agent, en activant ou en désactivant les modules dont nous avons besoin.
+Par défaut, tous les modules ne sont pas activés. Par exemple, si le module de vulnérabilité n'est pas activé, ce comportement peut être modifié en modifiant la configuration de l'agent pour activer ou désactiver les modules nécessaires.
 
 ![](https://hackmd.io/_uploads/Sk4NlO6F2.png)
-Illustration 11 - Écran Wazuh Agents
+Illustration 11 - Écran des agents Wazuh
 
-Dans notre cas, comme vous pouvez le voir, nous avons 4 agents disponibles et connectés, deux sur des ordinateurs Linux et deux autres sur des ordinateurs Windows, la version du système d'exploitation et son état sont indiqués entre autres. Par exemple, l'une des fonctions des agents consiste à obtenir l'inventaire des logiciels sur les ordinateurs gérés.
+Dans notre cas, comme vous pouvez le voir, nous avons 4 agents disponibles et connectés, dont 2 sur des ordinateurs Linux et 2 sur des ordinateurs Windows. La version du système d'exploitation et son état sont indiqués, entre autres informations. Par exemple, l'une des fonctions des agents est d'obtenir l'inventaire des logiciels sur les ordinateurs gérés.
 
 ![](https://hackmd.io/_uploads/SyEwe_aYh.png)
-Illustration 12 - Écran Wazuh Modulo Security events
+Illustration 12 - Écran des événements de sécurité Wazuh
 
-Dans Security Events, nous pouvons voir que l'agent qui signale de loin le plus d'informations sur les événements est le serveur Windows qui est un contrôleur de domaine, cela ne signifie évidemment pas que nous avons un problème, simplement qu'il a plus d'activité au niveau des événements de sécurité.
+Dans la section "Security Events", nous pouvons voir que l'agent qui signale le plus d'informations sur les événements est le serveur Windows, qui est un contrôleur de domaine. Cela ne signifie évidemment pas que nous avons un problème, mais simplement qu'il y a plus d'activité en termes d'événements de sécurité.
 
-C'est le travail de l'analyste de la sécurité, d'effectuer des recherches et de définir des alertes sur les comportements qui peuvent constituer une menace ou même provoquer un incident.
+Il incombe à l'analyste de sécurité d'effectuer des recherches et de définir des alertes sur les comportements qui pourraient constituer une menace ou même provoquer un incident.
 
-Kibana vous permet de visualiser des informations à l'aide de tableaux de bord ou de faire des recherches sur les données contenues dans Elasticsearch, Wazuh et ses modules ont déjà créé des tableaux de bord, mais il existe des options pour créer tous les tableaux de bord nécessaires, comme vous le savez déjà, ils peuvent être très utiles, car en général nous traitons mieux les informations de manière visuelle.
+Kibana permet de visualiser des informations à l'aide de tableaux de bord ou d'effectuer des recherches sur les données contenues dans Elasticsearch. Wazuh et ses modules ont déjà créé des tableaux de bord, mais il existe également des options pour créer tous les tableaux de bord nécessaires. Les tableaux de bord sont très utiles car ils permettent de mieux comprendre les informations de manière visuelle.
+
+### TheHive
+
+Pour TheHive, notre outil de gestion des incidents, la première fois que nous y accédons, une option s'affiche pour mettre à jour la base de données du produit (Cassandra dans notre cas) afin de créer les structures et les données nécessaires pour commencer à travailler avec l'outil.
+
+![](https://hackmd.io/_uploads/HJu-tKaYn.png)
+Illustration 13 - Écran de connexion à TheHive
+
+Une fois authentifiés dans l'outil, nous avons une organisation par défaut, qui est l'organisation d'administration. Nous pouvons l'utiliser, mais il est recommandé de changer le mot de passe par défaut pour un mot de passe plus sécurisé.
+
+La prochaine étape consiste à créer une organisation, dans notre cas, la société fictive à laquelle nous offrons nos services SOC ou CSIRT. Dans notre exemple, la société s'appelle MyHome Inc. Il suffit de donner un nom et une description à l'organisation.
+
+![](https://hackmd.io/_uploads/Sk8uYYpt3.png)
+Illustration 14 - Écran de création d'organisation dans TheHive
+
+Une fois l'organisation créée, nous pouvons déjà créer des utilisateurs au sein de cette organisation.
+
+![](https://hackmd.io/_uploads/ryBsYFat2.png)
+Illustration 15 - Écran des organisations dans TheHive
+
+Pour ce faire, nous pouvons suivre le lien du nom de notre nouvelle organisation, où nous aurons la possibilité de le faire.
+
+![](https://hackmd.io/_uploads/SkJyqtTYh.png)
+Illustration 16 - Écran des utilisateurs par organisation dans TheHive
+
+Dans notre cas, nous avons créé un utilisateur pour gérer l'organisation. Nous utilisons des adresses e-mail comme noms d'utilisateur. Nous avons créé un premier compte avec le rôle "orgAdmin" et deux autres utilisateurs pour "cortex" et "elastalert" que nous utiliserons ultérieurement. Tous les utilisateurs ont activé une clé d'API. Seul l'utilisateur administrateur de l'organisation a reçu un mot de passe, car nous en aurons besoin pour accéder à TheHive dans cette organisation.
+
+J'ai créé les utilisateurs "cortex" et "elastalert" au sein de l'organisation, mais il serait logique de les créer dans l'organisation de gestion, à moins que nous ayons des instances différentes pour différentes organisations. Cela dépend des configurations spécifiques que vous souhaitez mettre en place.
+
+Si ce n'était pas un environnement simulé, nous devrions créer des utilisateurs pour tous nos analystes qui contribueraient aux cas, et des profils en lecture seule pourraient également être utilisés pour les auditeurs, les directeurs, etc., des profils qui ne participeront pas aux cas mais qui pourraient nécessiter des rapports.
+
+Une fois que nous avons créé cet utilisateur, nous nous déconnectons de l'utilisateur administrateur par défaut avec lequel nous nous sommes authentifiés dans l'outil en cliquant sur "Déconnexion" en haut à droite, au-dessus du nom de l'utilisateur.
+
+Avant cela, nous pouvons également accéder à l'option de configuration de l'interface utilisateur, où nous pouvons modifier le format de date (par défaut, il est au format MM/JJ/AA, mais nous pouvons le changer en JJ/MM/AA, qui est plus couramment utilisé dans notre pays, mais cela dépend des préférences personnelles). Nous pouvons également configurer l'affichage des cas une fois que nous nous connectons avec notre utilisateur d'organisation. J'ai laissé cette option par défaut.
+
+![](https://hackmd.io/_uploads/BkkEcK6th.png)
+Illustration 17 - Écran des cas dans TheHive
+
+Une fois authentifié en tant qu'utilisateur administrateur de notre nouvelle organisation, nous arrivons sur un écran affichant les cas. Comme nous n'en avons pas encore, nous pouvons appliquer des filtres (utiles lorsque nous avons un grand nombre de cas).
+
+En haut à gauche, nous avons des options que nous utiliserons fréquemment pour travailler avec l'outil :
+
+Accéder à la page d'accueil avec l'icône TheHive.
+Créer de nouveaux cas.
+Afficher les tâches qui nous sont affectées.
+Afficher les tâches en attente.
+Accéder aux alertes.
+Accéder aux tableaux de bord (nous pouvons les créer ou les importer, ils peuvent être privés ou partagés).
+Certaines de ces options seront utilisées plus tard dans notre cas d'utilisation.
+
+En haut à droite, nous avons un menu "Organisation" à côté de notre nom d'utilisateur authentifié dans l'application. À partir de ce menu, nous pouvons accéder à la configuration des utilisateurs, des modèles, des tags personnalisés et de l'interface utilisateur.
+
+![](https://hackmd.io/_uploads/BkjDqYTKh.png)
+Illustration 18 - Écran des modèles de cas dans TheHive
+
+Nous avons déjà vu la partie des utilisateurs précédemment, donc nous n'y reviendrons pas, mais vous pourriez être intéressé par les options de "Modèles", où nous pouvons créer des modèles avec des champs personnalisés pour cette organisation ou importer des modèles déjà créés par des tiers (par exemple, par la communauté).
+
+Enfin, un détail important en lien avec notre prochaine section, nous avons configuré TheHive pour se connecter à Cortex. Nous pourrions également le connecter à MISP, mais pour cette démonstration de fonctionnalité, cela n'a pas été jugé nécessaire.
+
+Pour configurer l'accès de TheHive à Cortex ou MISP, nous devons ajouter l'URL et la clé d'API correspondantes au fichier de configuration "application.conf", en ajoutant les sections appropriées, comme indiqué dans la documentation de TheHive.
+
+Pour Cortex, notre image Docker vous permet de configurer la connexion à Cortex à l'aide de paramètres. C'est l'option que nous avons suivie, comme vous pouvez le voir sur l'écran suivant. En bas à droite, nous avons une icône qui indique en vert que nous avons une connectivité avec Cortex (en rouge en cas de problème). Nous pouvons également vérifier cela en cliquant sur l'utilisateur avec lequel nous sommes authentifiés dans l'application, puis en sélectionnant "À propos". En plus de nous donner les versions des logiciels, nous pouvons voir si la connexion avec Cortex est établie (indiqué par OK).
+
+![](https://hackmd.io/_uploads/H1f3cY6Fn.png)
+Illustration 19 - Écran "À propos" et connexion entre TheHive et Cortex
+
+### Cortex
+
+Une fois que la base de données est initialisée, comme dans TheHive, nous pouvons accéder à notre instance de Cortex. Nous visitons l'URL où l'écran de connexion devrait apparaître.
+
+![](https://hackmd.io/_uploads/HJUHiK6Kh.png)
+Illustration 20 - Écran de connexion à Cortex
+
+Comme nous l'avons fait avec TheHive, la première étape consiste à créer une organisation. Dans notre cas, nous revenons à la société fictive MyHome Inc.
+
+![](https://hackmd.io/_uploads/SJdOiFpYn.png)
+Illustration 21 - Écran des organisations dans Cortex
+
+Maintenant que nous avons créé l'organisation, si nous cliquons dessus et suivons le lien, les utilisateurs nous apparaîtront. Par défaut, il n'y en a aucun, mais nous allons créer deux utilisateurs : un utilisateur avec tous les rôles, qui sera notre administrateur (nommé "Paola"), et un utilisateur avec les rôles "read" et "analyze", qui sera utilisé par TheHive pour interagir avec Cortex. Cet utilisateur n'a pas besoin de mot de passe, seule la clé d'API est nécessaire, comme nous l'avons mentionné précédemment lors de la configuration dans le fichier "application.conf".
+
+![](https://hackmd.io/_uploads/BkuiotTFh.png)
+Illustration 22 - Écran des utilisateurs par organisation dans Cortex
+
+Maintenant, nous nous déconnectons et nous nous connectons à l'application avec notre nouvel utilisateur administrateur d'organisation, "murdock". Nous devons maintenant configurer Cortex.
+
+Dans Cortex, nous avons deux types de jobs : les "analyzers" (analyseurs) et les "responders" (répondeurs). Nous commencerons par configurer les analyseurs. Dans les deux cas, il existe des services gratuits et payants qui nécessitent une clé d'API, laquelle est généralement nécessaire pour configurer et activer les analyseurs et certains répondeurs.
+
+Dans mon cas, j'ai quelques clés d'API (comme SHODAN) que j'ai en mode "Trial" ou "Free Use". Ces clés d'API ont des limitations d'utilisation, mais puisqu'il s'agit d'un environnement simulé, le volume de requêtes ne sera pas élevé, donc j'espère que cela sera suffisant.
+
+Avec plus de sources de renseignements et de meilleure qualité, nous pourrons obtenir des informations fiables et utiles pour les observateurs de nos cas dans TheHive.
+
+![](https://hackmd.io/_uploads/Sko0iFTK3.png)
+Illustration 23 - Écran des paramètres des analyseurs dans Cortex
+
+Si nous accédons à la section "Organisation", nous pouvons voir les utilisateurs (que nous avons déjà vus auparavant), puis nous allons dans "Analyzers Config", où nous pouvons configurer les analyseurs. Comme vous pouvez le voir sur l'image, il y en a jusqu'à 81 disponibles (ces paramètres sont communs à plusieurs analyseurs).
+
+Dans notre cas, nous activerons certains analyseurs. Pour cela, il suffit de cliquer sur "Edit" et de remplir les informations demandées dans le formulaire. Sur cet écran, vous pouvez voir quelles informations sont nécessaires pour chaque analyseur (les cases cochées représentent les informations fournies).
+
+Parmi les analyseurs, nous en avons un que nous examinerons plus en détail dans la section suivante : MISP. C'est là que notre composant de plateforme SIRP entre en jeu.
+
+![](https://hackmd.io/_uploads/rJrfhKTth.png)
+Illustration 24 - Écran de configuration de l'analyseur MISP dans Cortex
+
+Une fois les modules ou plugins que nous allons utiliser configurés, nous passons à la section suivante : "Analyzers". Il y en a 164 disponibles (qui utilisent les 81 configurations de paramètres mentionnées précédemment).
+
+![](https://hackmd.io/_uploads/SkNH3tTKn.png)
+Illustration 25 - Écran d'activation/désactivation des analyseurs dans Cortex
+
+Pour les activer, il suffit de cliquer sur "Enable" et un formulaire s'affiche pour demander des informations de configuration, telles que le temps de mise en cache, le délai pour les requêtes, etc. J'ai laissé les options par défaut en attendant de les tester et de voir si des ajustements sont nécessaires.
+
+Ensuite, nous pouvons voir les paramètres pour notre analyseur MISP. Comme vous pouvez le voir sur l'image, certaines informations sont incomplètes en haut, mais les paramètres que nous avons déjà configurés apparaissent ainsi que les nouveaux paramètres mentionnés précédemment.
+
+![](https://hackmd.io/_uploads/SyYD2Kath.png)
+Illustration 26 - Écran d'activation de l'analyseur MISP dans Cortex
+
+Au moment de la rédaction de ce document, j'ai activé les modules de réponse suivants (en attendant de confirmer certaines demandes d'accès à d'autres services) :
+
+AbuseIPDB_1_0
+Shodan_DNSResolve_1_0
+Shodan_Host_1_0
+Shodan_Host_History_1_0
+Shodan_InfoDomain_1_0
+Shodan_ReverseDNS_1_0
+Shodan_Search_2_0
+SpamhausDBL_1_0
+TalosReputation_1_0
+TeamCymruMHR_1_0
+Threatcrowd_1_0
+TorBlutmagie_1_0
+TorProject_1_0
+URLhaus_2_0
+UnshortenLink_1_2
+Urlscan_io_Scan_0_1_0
+Urlscan_io_Search_0_1_1
+VirusTotal_GetReport_3_0
+VirusTotal_Scan_3_0
+Virusshare_2_0
+Chaque analyseur est spécialisé dans des domaines différents, tels que la réputation des adresses IP, les noms DNS, les recherches d'observables dans les emails, le réseau TOR, les URL, l'analyse de fichiers suspects, etc.
+
+Généralement, les analyseurs sont des programmes écrits en Python. Certains d'entre eux s'exécutent sous forme de conteneurs Docker, ce qui est courant pour les analyseurs et les répondeurs.
+
+![](https://hackmd.io/_uploads/ByxqnY6Fh.png)
+Illustration 27 - Écran de configuration des répondeurs dans Cortex
+
+De même, nous avons une section de configuration des paramètres qui nous permet d'activer ou de désactiver les répondeurs. La logique est similaire à celle des analyseurs.
+
+En ce qui concerne les répondeurs, le choix est moins étendu (actuellement 22). Cela dépend de l'infrastructure dont dispose l'entreprise ou l'organisation à défendre. Il s'agit donc d'un point d'amélioration pour Cortex en termes de prise en charge des produits (pare-feu, IPS, etc.). C'est un défi pour la communauté et les utilisateurs de ce produit, qui peuvent également contribuer à son développement.
+
+Dans notre cas, nous avons activé les répondeurs suivants :
+
+Virustotal_Downloader_0_1
+Wazuh_1_0
+Le premier est bien connu dans le domaine de la sécurité, tandis que le second correspond à notre outil Wazuh. Comme expliqué précédemment, Wazuh agit en tant que répondeur dans ce cas.
+
+Un utilisateur Wazuh a donc été créé pour ce type de réponse. Nous nous rendons dans Wazuh Kibana et créons l'utilisateur "cortex".
+
+Dans ce cas, étant donné qu'il s'agit d'un environnement simulé, nous avons configuré l'utilisateur avec le rôle "admin". Cependant, dans un environnement réel, il serait préférable de limiter les autorisations au strict minimum nécessaire. Dans ce cas, j'ai choisi cette configuration pour m'assurer que cela fonctionne plutôt que de passer du temps à tester différentes autorisations pour vérifier si elles sont suffisantes.
+
+![](https://hackmd.io/_uploads/rJ333Kpth.png)
+Illustration 28 - Écran des utilisateurs Wazuh
+
+Pour conclure, nous avons toujours considéré Cortex comme un allié de TheHive, mais il peut également être utilisé individuellement. En haut à gauche, nous pouvons voir l'option "New Analysis", qui nous permet de soumettre différents types de données (observables) à analyser par Cortex.
+
+![](https://hackmd.io/_uploads/HyzkTYptn.png)
+Illustration 29 - Écran de lancement de l'analyse dans Cortex
+
+### MISP
+
+Une fois le produit installé et opérationnel, nous avons une base de données vide, tout comme dans les cas précédents. Pour accéder au service, nous utilisons la console Web en suivant l'URL, où l'écran de connexion de MISP apparaît.
+
+![](https://hackmd.io/_uploads/r1QM0KaF3.png)
+Illustration 30 - Écran de connexion à MISP
+
+Nous nous connectons en tant qu'administrateur par défaut (admin@admin.test) et procédons à la création de notre organisation fictive, qui représente la société cliente pour laquelle notre plateforme SIRP fournit des services.
+
+![](https://hackmd.io/_uploads/ByiPCF6F2.png)
+Illustration 31 - Vue des organisations dans MISP
+
+Sur cet écran, nous voyons notre organisation par défaut et celle que nous avons créée, MyHome Inc. Pour créer une nouvelle organisation, nous accédons au menu "Administration" et sélectionnons "Add Organization", ou nous cliquons simplement sur "Administration" et trouvons l'option "Add Organization" dans le menu latéral gauche.
+
+Nous remplissons quelques champs, tels que le nom, un identifiant unique (qui peut être généré automatiquement), une description, la nationalité, le secteur, etc.
+
+MISP offre de nombreuses options de configuration et d'actions sur le produit, mais dans ce TFM, nous n'en examinerons que quelques-unes.
+
+Ensuite, comme pour les autres composants, nous créons un utilisateur pour la nouvelle organisation et un utilisateur pour notre Cortex, afin de pouvoir travailler avec notre plateforme MISP via l'API.
+
+![](https://hackmd.io/_uploads/BJniRYpFh.png)
+Illustration 32 - Écran des utilisateurs dans MISP
+
+Comme pour les cas précédents, une adresse e-mail est requise. Nous avons donc créé un utilisateur avec des autorisations en lecture seule, ce qui devrait suffire si la fonction de Cortex est prise en compte.
+
+Nous nous déconnectons et nous connectons à l'application MISP avec notre nouvel utilisateur.
+
+À ce stade, notre base de données est toujours vide. Nous devons donc lui donner du contenu. Pour cela, nous examinons notre liste de "Feeds".
+
+![](https://hackmd.io/_uploads/SykyC9pFn.png)
+Illustration 33 - Écran de la liste des flux dans MISP
+
+Par défaut, deux flux sont fournis, du moins dans mon installation utilisant le référentiel MISP sur GitHub. Pour les afficher et les activer (ils sont désactivés par défaut), nous accédons à "Sync Actions" et "List Feeds". Dans les actions à droite, nous trouvons l'option pour les activer.
+
+L'une des fonctionnalités de MISP est de permettre le partage d'informations conformément à une norme de partage. Sur la page MISP Default Feeds (misp-project.org) du projet MISP, nous pouvons trouver une liste de flux que nous pouvons ajouter à notre installation.
+
+En dehors de cette liste de flux, il serait judicieux de se connecter et d'échanger des informations avec d'autres instances MISP de notre environnement, qu'il s'agisse d'organisations de notre secteur ou d'organismes officiels de CERT.
+
+Ces flux peuvent être téléchargés à tout moment, comme le montrent les actions à côté de chaque flux dans la liste des événements. Cependant, vous devez également activer régulièrement ces mises à jour pour rester à jour avec les informations qui circulent dans le monde.
+
+![](https://hackmd.io/_uploads/Sywz0cpt3.png)
+Illustration 34 - Écran de planification des tâches dans MISP
+
+Dans le menu "Administration", nous avons des "Scheduled Tasks" pour programmer la mise à jour de nos flux (ceux de la liste ci-dessus) et du cache maintenu dans MISP.
+
+Vous pouvez programmer la fréquence d'exécution et l'heure de la première exécution. Le champ est modifiable en cliquant dessus. La colonne "Next Run" indique la prochaine exécution, bien que, à mon avis, elle ne montre que la date, ce qui rend difficile de connaître l'heure exacte sans calculer à partir de l'heure de début et de la fréquence configurée.
+
+Dans notre cas, nous voyons qu'une tâche sur deux est terminée. Nous pouvons vérifier comment cela s'est déroulé en accédant à l'option "Jobs".
+
+![](https://hackmd.io/_uploads/BJxsAc6th.png)
+Illustration 35 - Écran des tâches dans MISP
+
+Apparemment, l'exécution du flux 1 semble fonctionner correctement, mais pour le flux 2 (numéro attribué dans la liste des flux), le téléchargement échoue toujours (cela doit être vérifié pour déterminer s'il y a un problème avec l'URL ou l'accès, etc.). Cependant, le téléchargement manuel, qui est la première ligne de l'écran précédent, semble avoir fonctionné sans erreur, du moins en apparence.
+
+En parlant d'erreurs, il est également intéressant de mentionner l'option "Server Settings and Maintenance" du même menu "Administration".
+
+![](https://hackmd.io/_uploads/ryL6RqpY3.png)
+Illustration 36 - Écran des paramètres du serveur et de la maintenance dans MISP
+
+C'est une sorte d'option d'auto-diagnostic du logiciel MISP. Elle permet également de modifier certains paramètres à partir de ces écrans. Idéalement, tout devrait être en vert, mais j'ai passé un peu de temps à résoudre certains "Critical Settings", la plupart étant dus à des paramètres non configurés qui sont laissés par défaut (par exemple, la langue).
+
+Enfin, pour conclure cette section, il est important de noter que MISP permet également de partager des informations avec notre environnement. Il est possible d'ajouter nos propres événements avec des informations IOC spécifiques à notre organisation. Nous pouvons utiliser les balises déjà créées pour les événements importés et créer nos propres balises pour mieux organiser les données que nous ajoutons depuis notre organisation.
+
+![](https://hackmd.io/_uploads/rJaZyopY3.png)
+Illustration 37 - Écran de la liste des événements dans MISP
+
+Pour cela, nous pouvons utiliser le menu "Event Actions", où l'option "List Tags" nous permet également d'ajouter des balises. Dans notre cas, nous avons ajouté une balise "Manual" lorsqu'un analyste ajoute des informations à notre MISP manuellement.
+
+![](https://hackmd.io/_uploads/B1PIOiTK2.png)
+Illustration 38 - Écran de la liste des balises dans MISP
+
+### Praeco-Elastalert
+
+Voici deux composants, Praeco et Elastalert, qui sont intégrés entre eux de la même manière que l'intégration précédente entre Wazuh, Elasticsearch et Kibana, avec quelques différences.
+
+Dans cette configuration, Elastalert agit en tant que backend, tandis que Praeco est un frontend web. Elastalert fonctionne au niveau des fichiers pour générer des règles et effectuer des recherches dans Elasticsearch. Il enregistre également ses métadonnées et son audit dans Elasticsearch, ce qui lui permet de générer ses propres index. Les informations d'accès à Elasticsearch, telles que l'utilisateur/mot de passe ou le jeton utilisateur, peuvent être spécifiées dans le fichier de configuration lors de l'installation.
+
+En ce qui concerne la sortie des alertes, Elastalert offre plusieurs options, telles que JIRA, Slack, l'e-mail, et surtout, TheHive, qui nous intéresse particulièrement pour transmettre les informations aux analystes de sécurité de l'organisation.
+
+Praeco est l'interface web qui facilite la configuration des alertes à l'aide de formulaires et affiche les métadonnées d'Elastalert.
+
+![](https://hackmd.io/_uploads/BJOFiipFn.png)
+Illustration 39 - Écran principal de Praeco
+
+Cependant, un autre défaut du produit est son manque d'authentification, ce qui signifie qu'il permet l'accès à toute personne ayant la visibilité de l'URL. Cela peut être dangereux car cela permet à des utilisateurs non autorisés d'effectuer des requêtes sur Elasticsearch, qui contient des informations sensibles sur l'organisation. Pour remédier à ce problème, nous recommandons fortement de configurer NGINX pour fournir un cryptage TLS et d'ajouter une authentification de base.
+
+Lorsque vous accédez à la console Web de Praeco, vous remarquerez un menu sur la gauche de l'écran. Les dossiers «Rules» et «Templates» sont vides après l'installation, à moins que vous n'importiez du contenu provenant de la communauté. Cela signifie qu'aucune règle n'est définie par défaut.
+
+Dans le cadre de ce test, nous avons créé une règle appelée «SSH Failed Login». Cette règle interroge Elasticsearch pour rechercher plus de deux connexions SSH ayant échoué (ce nombre est trop faible pour générer une alerte réelle). Si la règle détecte un dépassement du seuil, une alerte est générée dans TheHive. Cette alerte peut ensuite être traitée en l'ajoutant à un cas ou en suivant le processus approprié que vous jugez le plus pratique.
+
+![](https://hackmd.io/_uploads/B1f2-2TKh.png)
+Illustration 40 - Écran d'Alertes de TheHive (alertes créées par Elastalert)
+
+Pour générer des alertes pertinentes, il est important de jouer avec les compteurs d'événements, la fréquence, et d'autres paramètres. Ces paramètres déterminent si une alerte est utile en évitant autant que possible les faux positifs, tout en détectant les comportements qui représentent de réelles menaces et/ou des incidents potentiels.
+
+En revenant à Praeco, vous pouvez voir ci-dessous l'écran où les règles sont définies pour déterminer quand une alerte doit être générée. Vous spécifiez l'index à surveiller et utilisez un langage similaire à SQL pour générer des requêtes, déterminer les champs à afficher, le titre de l'alerte, etc.
+
+Pour chaque règle, ces données peuvent être différenciées, y compris la police utilisée. Vous pouvez même utiliser différentes sources Elasticsearch si nécessaire, bien que cela nécessiterait une configuration manuelle, car Praeco ne prend pas en charge cette fonctionnalité directement.
+
+Dans notre cas, la configuration de TheHive est également stockée dans un fichier situé dans le répertoire «Rules», qui a un rôle spécial. Ce fichier permet d'enregistrer l'URL et les informations d'accès, et peut ensuite être utilisé par toutes les règles. Il utilise la clé d'API de l'utilisateur «elastalert», comme nous l'avons vu dans la section de configuration de TheHive.
+
+![](https://hackmd.io/_uploads/ryeCMn6F3.png)
+Illustration 41 - Écran de définition de règle dans Praeco
+
+En plus des étapes précédentes, il est essentiel de créer un utilisateur dans Elasticsearch et de lui attribuer les autorisations nécessaires pour créer et mapper les index requis pour utiliser Elastalert, ainsi que pour consulter les données sur lesquelles les alertes sont basées.
+
+![](https://hackmd.io/_uploads/B1inQhatn.png)
+Illustration 42 - Écran des utilisateurs Elasticsearch (utilisateur "elastalert")
+
+Dans la section "Internal Users" de Wazuh-Kibana, vous pouvez créer un autre utilisateur nommé "elastalert" de la même manière que vous l'avez fait pour TheHive. Vous devez attribuer un nom d'utilisateur et un mot de passe à cet utilisateur.
+
+Cela peut être fait via l'interface web de Wazuh-Kibana, où vous avez également la possibilité de créer un rôle pour attribuer les autorisations nécessaires à ce nouvel utilisateur.
+
+![](https://hackmd.io/_uploads/SyUgVnpYh.png)
+Illustration 43 - Écran des rôles Elasticsearch (autorisations "elastalert")
+
+Pour gérer les autorisations de l'utilisateur "elastalert", vous pouvez configurer des rôles dans Elasticsearch. Les rôles permettent de définir les autorisations spécifiques pour cet utilisateur. Vous pouvez attribuer des autorisations pour créer et mapper les index nécessaires à Elastalert, ainsi que pour consulter les données nécessaires pour générer les alertes.
+
+En résumé, grâce à toutes les configurations réalisées lors de votre travail de fin de Master (TFM), vous avez créé votre propre plate-forme SIRP (Security Incident Response Platform).
+
+### Cas d'utilisation
+
+#### Description
+Dans le cadre de notre plate-forme SIRP, nous allons décrire un cas d'utilisation qui met en œuvre tous les composants de notre environnement de simulation.
+
+1. Événements de sécurité détectés par Wazuh : Nous utilisons les agents Wazuh et le serveur Wazuh pour détecter des événements de sécurité en fonction de leurs règles. Ces événements sont stockés dans notre plateforme Elasticsearch, qui fait partie de la solution Wazuh.
+
+2. Création d'une alerte intégrée à TheHive : Nous créons une alerte spécifique pour détecter l'événement ou le groupe d'événements choisi. Cette alerte est ensuite intégrée à TheHive, conformément aux paramètres présentés dans la section 4.5.
+
+3. Traitement de l'alerte dans TheHive : À ce stade, TheHive entre en jeu pour prendre en charge l'alerte et la traiter avec notre outil de gestion des incidents. Nous pouvons créer un cas, ajouter des observables pertinents et effectuer d'autres actions nécessaires.
+
+4. Analyse des observables avec Cortex : Une fois que nous avons des observables dans TheHive, nous pouvons les analyser en utilisant les analyseurs disponibles dans Cortex. Cela nous aide à déterminer si les observables sont problématiques, s'ils sont des faux positifs, etc.
+
+5. Enrichissement des cas avec MISP : Parmi les analyseurs disponibles, nous avons notre plateforme MISP, qui est l'une des sources d'informations permettant d'enrichir le cas en fonction des résultats obtenus.
+
+6. Réponse et clôture du cas : En fonction des découvertes et des analyses effectuées, nous pouvons décider de la nature de la réponse à apporter à l'aide des modules disponibles dans Cortex. Il peut s'agir de prendre des mesures supplémentaires pour répondre à la menace ou simplement de finaliser la documentation du cas et de le fermer.
+
+Ce cas d'utilisation met en œuvre tous les composants de notre solution SIRP et illustre un scénario réaliste auquel un analyste de sécurité pourrait être confronté dans n'importe quelle entreprise ou organisation.
+
+#### Tests effectués
+
+Avant de procéder à l'utilisation réelle, des tests unitaires ont été effectués sur chaque composant pour valider leur bon fonctionnement et s'assurer que le cas d'utilisation se déroulerait correctement lors de son exécution.
+
+Un scénario de simulation a été élaboré conformément aux étapes décrites ci-dessous, impliquant l'utilisation de tous les composants de l'environnement qui ont été mis en place dans le cadre de ce TFM.
+
+Le scénario en question simule une possible attaque par force brute par un "insider" (un membre du personnel interne de l'entreprise).
+
+##### Étapes: 
+
+1. L'objectif est de simuler une attaque par force brute en effectuant un grand nombre de tentatives de connexion échouées à l'aide d'un script exécuté depuis la machine cliente Windows (WINCLT001) contre le compte utilisateur root sur la machine PRX001.
+
+2. Cette action génère des événements de sécurité, qui sont ensuite détectés et enregistrés dans notre console Web Wazuh-Kibana. De plus, cette attaque est également identifiée comme un possible TTP (Tactic, Technique, Procedure) de l'attaque par force brute, selon la classification de Mitre.
+
+3. Une alerte spécifique est créée dans Praeco-Elastalert pour détecter ces tentatives de connexion échouées sur une courte période. Les critères d'alerte sont configurés pour détecter plus de 10 événements par minute, ce qui est clairement anormal et indique une attaque par force brute automatisée.
+
+4. À la suite de ces alertes, plusieurs alertes sont générées dans TheHive, car la définition d'alerte spécifie qu'en cas de répétition du comportement pendant un certain laps de temps, une nouvelle alerte doit être générée.
+
+5. Dans TheHive, en tant qu'administrateur et analyste (étant donné notre effectif réduit), nous examinons les alertes et constatons qu'il y en a plusieurs provenant de la même source, car nous avons configuré l'alerte pour inclure la ligne de "full_log" qui contient les informations pertinentes. Étant donné que l'alerte dans Wazuh ne fournit pas directement l'adresse IP source en tant que champ distinct, nous devons extraire cette information de la ligne complète du journal.
+
+6. Nous ouvrons un cas dans TheHive en sélectionnant l'une des alertes. Comme nous n'avions aucun cas existant, il apparaît comme "Empty". Si nous cliquons sur le bouton "Yes, import", un nouveau cas est créé avec un numéro d'identification et le titre de l'alerte en tant que nom du cas. Il serait également possible d'ouvrir un cas directement avec un titre personnalisé et ensuite fusionner l'alerte (ou les alertes) dans ce cas.
+
+7. Nous ajoutons un nouvel observable au cas et incluons l'adresse IP source provenant de l'alerte. Nous ajoutons également un tag et une description appropriés pour cet observable.
+
+![](https://hackmd.io/_uploads/HkRIrhaK2.png)
+
+8. Bien que nous sachions qu'il s'agit d'une adresse IP interne, nous essayons néanmoins de soumettre cette adresse IP à nos "analyseurs" disponibles dans Cortex. En cliquant sur l'adresse IP de l'observable, une liste des "analyseurs" Cortex disponibles est affichée.
+
+9. Nous pouvons exécuter tous les "analyseurs" en utilisant l'option "Run All", bien que nous sachions que nous n'obtiendrons pas de résultats significatifs. Pour notre test, nous avons utilisé les analyseurs MISP, Shodan et AbuseIPDB, qui sont configurés pour prendre en charge les adresses IP.
+
+10. Comme prévu, les résultats des "analyseurs" indiquent que l'adresse IP n'a pas pu être trouvée ou ne contient que peu d'informations pertinentes. Cela est dû au fait qu'il s'agit d'une adresse IP privée de notre réseau d'entreprise simulé.
+
+11. Bien que nous n'ayons pas trouvé de preuve d'activité malveillante, il est important de souligner que cette activité est illégale, car nous savons qu'il est impossible de générer autant de connexions par minute légitimement.
+
+12. Dans ce cas, nous décidons d'utiliser les fonctionnalités de réponse de notre Cortex avec Wazuh. Wazuh est configuré pour fournir des capacités de réponse aux incidents, comme indiqué dans la section 4.3 lors de la configuration de Cortex.
+
+13. Dans l'onglet "Observables", une icône en forme de roue dentée apparaît à droite, sous la section "Actions". Nous cliquons sur cette icône et sélectionnons "Wazuh" comme option de réponse.
+
+![](https://hackmd.io/_uploads/BJeiS2Tt2.png)
+
+14. Une fenêtre de confirmation apparaît, et nous cliquons sur "Yes, run it" pour confirmer l'exécution de l'action de réponse avec Wazuh.
+
+15. À partir de ce moment, il ne devrait plus être possible d'accéder à cette machine à partir de l'appareil concerné. Cela constitue une mesure temporaire en attendant de mener d'autres investigations que nous ne pouvons pas réaliser directement avec les outils disponibles (par exemple, vérifier l'ordinateur de l'utilisateur). Nous pouvons maintenant identifier qui était le propriétaire de l'adresse IP, grâce aux informations disponibles dans Wazuh, etc.
+
+16. Dans notre cas, nous ajoutons un autre observable de type "hostname" pour indiquer à quelle machine l'adresse IP est associée.
+
+17. À partir de ce stade, la décision de poursuivre ou de clore l'affaire dépend de la politique de l'entreprise ou de l'organisation. Il est possible de laisser l'affaire ouverte en attendant d'obtenir des informations supplémentaires (par exemple, des informations provenant de l'examen de l'ordinateur de l'utilisateur) ou de la clôturer.
+
+18. Pour notre exemple de cas d'utilisation, nous procédons à la clôture de l'affaire et avons la possibilité de rédiger un résumé de l'incident pour archiver toutes les informations pertinentes et les actions prises dans le cadre de la réponse à cet incident.
+
+![](https://hackmd.io/_uploads/rJvOU2atn.png)
+
+### Conclusions
+
+Les travaux réalisés ont permis d'atteindre l'objectif de disposer d'une plateforme de gestion des incidents entièrement opérationnelle, avec des capacités de détection, d'analyse et de réaction.
+
+Cependant, il reste des améliorations à apporter à l'installation et à la configuration des produits. Voici quelques-unes des améliorations suggérées pour votre environnement :
+
+* Homogénéiser la configuration des volumes, des secrets et des certificats dans les différents composants de la plateforme.
+
+* Utiliser le service d'équilibrage intégré dans les nœuds et permettre la visibilité des microservices vers l'extérieur via les composants Ingress.
+
+* Intégrer un DNS externe avec kubeDNS (DNS interne de Kubernetes) pour une meilleure résolution des noms de domaine.
+
+* Améliorer la sécurité en utilisant des stratégies réseau au sein du cluster Kubernetes pour limiter l'accès aux composants.
+
+* Limiter les ressources que les composants peuvent utiliser afin d'optimiser les performances et de garantir une utilisation efficace des ressources disponibles.
+
+* Ajouter une surveillance pour vos propres clusters Kubernetes afin de détecter et redémarrer automatiquement les pods en cas de dysfonctionnement.
+
+* Renforcer la sécurité des composants, notamment en améliorant la gestion des certificats et en désactivant les certificats auto-générés non vérifiés.
+
+* Modifier les paramètres par défaut des composants pour renforcer la sécurité de la solution.
+
+* Implémenter l'authentification de base via NGINX pour les composants qui n'ont pas de système d'authentification intégré, comme Praeco.
+
+* Mettre en place une gestion des utilisateurs via une source externe telle qu'un annuaire Active Directory (AD) ou un service LDAP, et envisager une gestion intégrée avec des composants de Single Sign-On (SSO) pour une expérience d'authentification améliorée.
+
+* Utiliser Logstash et les agents Beat pour collecter les journaux d'autres produits que le système d'exploitation, afin d'améliorer la visibilité et la collecte de données de sécurité.
+
+* Optimiser la configuration d'Elasticsearch pour en faire un véritable SIEM, en optimisant l'utilisation des index, des shards, des réplicas, etc.
+
+* Utiliser Elasticsearch pour stocker les données de TheHive et de Cortex, en les intégrant à votre installation existante.
+
+* Améliorer les capacités d'analyse et de réaction de Cortex en intégrant des sources de renseignement externes payantes.
+
+* Favoriser le partage d'informations avec d'autres organisations, entités et organismes officiels via la composante MISP, afin de renforcer la collaboration et de bénéficier d'une plus grande visibilité sur les menaces.
+
+* En mettant en œuvre ces améliorations, vous pourrez renforcer la sécurité, l'efficacité et les fonctionnalités de votre plateforme SIRP, en la rendant plus adaptée aux besoins de votre entreprise ou de votre organisation.
