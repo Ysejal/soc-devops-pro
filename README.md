@@ -102,6 +102,7 @@ Deux services d'assistance sont disponibles :
 
 •   Standard : 8x5 pendant les heures de bureau (réponse maximale dans 8 heures)
 •   Premium : 24x7 (réponse maximale en 4 heures)
+
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/9b78d9af-fd5a-4504-b48a-44caa62d0f6c)
 
 Illustration 1 - Fonctionnalités de l'agent Wazuh
