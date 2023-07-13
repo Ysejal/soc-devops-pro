@@ -402,7 +402,6 @@ Sur le site de MISP, nous pouvons trouver ses fonctionnalités  :
 Dans notre installation, nous configurerons MISP pour importer des informations, car nous n'aurons pas de cas à partager, bien que vous puissiez effectuer une configuration en simulant un environnement de travail réel dans lequel nous pouvons contribuer à la communauté.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/780c387b-d8b0-45ca-9fec-6439acd03c8a)
-
 Illustration 6 - Schéma MISP
 
 ### Éléments qui composent notre plate-forme SIRP
@@ -535,7 +534,7 @@ Les nœuds maîtres, étant les nœuds de gestion de Kubernetes, seront égaleme
 Par mesure de sécurité, le déploiement d'applications ou d'autres composants sur les nœuds maîtres sera désactivé. Nous disposerons donc de 4 nœuds disponibles pour déployer notre solution SIRP.
 
 ![image](https://github.com/Ysejal/soc-devops-pro/assets/72010054/2f305055-5c5d-4e1b-92be-1ebcafc67f85)
-Illustration 7 - Modèle de cluster Kubernetes HA etcd stacked (kubernetes.io)
+Illustration 8 - Modèle de cluster Kubernetes HA etcd stacked (kubernetes.io)
 
 Il existe deux modèles pour créer un cluster Kubernetes HA avec Kubeadm : le modèle topologique "etcd stacked" et le modèle "etcd external".
 
